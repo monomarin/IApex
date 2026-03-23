@@ -547,6 +547,7 @@ export function CompanySettings() {
           </div>
         </div>
       </div>
+      </div>
     </div>
   );
 }

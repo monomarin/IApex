@@ -338,6 +338,7 @@ export function Layout() {
                   title={`Switch to ${nextTheme} mode`}
                 >
                   {theme === "dark" ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
+                </Button>
                 <Button
                   type="button"
                   variant="ghost"
@@ -406,6 +407,7 @@ export function Layout() {
                   title={`Switch to ${nextTheme} mode`}
                 >
                   {theme === "dark" ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
+                </Button>
                 <Button
                   type="button"
                   variant="ghost"
