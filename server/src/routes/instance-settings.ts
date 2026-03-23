@@ -1,6 +1,6 @@
 import { Router, type Request } from "express";
-import type { Db } from "@paperclipai/db";
-import { patchInstanceExperimentalSettingsSchema, patchInstanceGeneralSettingsSchema } from "@paperclipai/shared";
+import type { Db } from "@iapexai/db";
+import { patchInstanceExperimentalSettingsSchema, patchInstanceGeneralSettingsSchema } from "@iapexai/shared";
 import { forbidden } from "../errors.js";
 import { validate } from "../middleware/validate.js";
 import { instanceSettingsService, logActivity } from "../services/index.js";

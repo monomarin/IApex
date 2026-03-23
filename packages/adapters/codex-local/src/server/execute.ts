@@ -1,25 +1,25 @@
 import fs from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import { inferOpenAiCompatibleBiller, type AdapterExecutionContext, type AdapterExecutionResult } from "@paperclipai/adapter-utils";
+import { inferOpenAiCompatibleBiller, type AdapterExecutionContext, type AdapterExecutionResult } from "@iapexai/adapter-utils";
 import {
   asString,
   asNumber,
   asBoolean,
   asStringArray,
   parseObject,
-  buildPaperclipEnv,
+  buildIApexEnv,
   redactEnvForLogs,
   ensureAbsoluteDirectory,
   ensureCommandResolvable,
-  ensurePaperclipSkillSymlink,
+  ensureIApexSkillSymlink,
   ensurePathInEnv,
-  readPaperclipRuntimeSkillEntries,
-  resolvePaperclipDesiredSkillNames,
+  readIApexRuntimeSkillEntries,
+  resolveIApexDesiredSkillNames,
   renderTemplate,
   joinPromptSections,
   runChildProcess,
-} from "@paperclipai/adapter-utils/server-utils";
+} from "@iapexai/adapter-utils/server-utils";
 import { parseCodexJsonl, isCodexUnknownSessionError } from "./parse.js";
 import { pathExists, prepareManagedCodexHome, resolveManagedCodexHomeDir } from "./codex-home.js";
 import { resolveCodexDesiredSkillNames } from "./skills.js";
@@ -68,7 +68,7 @@ function resolveCodexBiller(env: Record<string, string>, billingType: "api" | "s
   return billingType === "subscription" ? "chatgpt" : openAiCompatibleBiller ?? "openai";
 }
 
-async function isLikelyPaperclipRepoRoot(candidate: string): Promise<boolean> {
+async function isLikelyIApexRepoRoot(candidate: string): Promise<boolean> {
   const [hasWorkspace, hasPackageJson, hasServerDir, hasAdapterUtilsDir] = await Promise.all([
     pathExists(path.join(candidate, "pnpm-workspace.yaml")),
     pathExists(path.join(candidate, "package.json")),
@@ -79,7 +79,7 @@ async function isLikelyPaperclipRepoRoot(candidate: string): Promise<boolean> {
   return hasWorkspace && hasPackageJson && hasServerDir && hasAdapterUtilsDir;
 }
 
-async function isLikelyPaperclipRuntimeSkillPath(
+async function isLikelyIApexRuntimeSkillPath(
   candidate: string,
   skillName: string,
   options: { requireSkillMarkdown?: boolean } = {},
@@ -93,7 +93,7 @@ async function isLikelyPaperclipRuntimeSkillPath(
 
   let cursor = path.dirname(skillsRoot);
   for (let depth = 0; depth < 6; depth += 1) {
-    if (await isLikelyPaperclipRepoRoot(cursor)) return true;
+    if (await isLikelyIApexRepoRoot(cursor)) return true;
     const parent = path.dirname(cursor);
     if (parent === cursor) break;
     cursor = parent;
@@ -102,7 +102,7 @@ async function isLikelyPaperclipRuntimeSkillPath(
   return false;
 }
 
-async function pruneBrokenUnavailablePaperclipSkillSymlinks(
+async function pruneBrokenUnavailableIApexSkillSymlinks(
   skillsHome: string,
   allowedSkillNames: Iterable<string>,
   onLog: AdapterExecutionContext["onLog"],
@@ -120,7 +120,7 @@ async function pruneBrokenUnavailablePaperclipSkillSymlinks(
     const resolvedLinkedPath = path.resolve(path.dirname(target), linkedPath);
     if (await pathExists(resolvedLinkedPath)) continue;
     if (
-      !(await isLikelyPaperclipRuntimeSkillPath(resolvedLinkedPath, entry.name, {
+      !(await isLikelyIApexRuntimeSkillPath(resolvedLinkedPath, entry.name, {
         requireSkillMarkdown: false,
       }))
     ) {
@@ -130,7 +130,7 @@ async function pruneBrokenUnavailablePaperclipSkillSymlinks(
     await fs.unlink(target).catch(() => {});
     await onLog(
       "stdout",
-      `[paperclip] Removed stale Codex skill "${entry.name}" from ${skillsHome}\n`,
+      `[IApex] Removed stale Codex skill "${entry.name}" from ${skillsHome}\n`,
     );
   }
 }
@@ -150,7 +150,7 @@ export async function ensureCodexSkillsInjected(
   onLog: AdapterExecutionContext["onLog"],
   options: EnsureCodexSkillsInjectedOptions = {},
 ) {
-  const allSkillsEntries = options.skillsEntries ?? await readPaperclipRuntimeSkillEntries({}, __moduleDir);
+  const allSkillsEntries = options.skillsEntries ?? await readIApexRuntimeSkillEntries({}, __moduleDir);
   const desiredSkillNames =
     options.desiredSkillNames ?? allSkillsEntries.map((entry) => entry.key);
   const desiredSet = new Set(desiredSkillNames);
@@ -173,7 +173,7 @@ export async function ensureCodexSkillsInjected(
         if (
           resolvedLinkedPath &&
           resolvedLinkedPath !== entry.source &&
-          (await isLikelyPaperclipRuntimeSkillPath(resolvedLinkedPath, entry.runtimeName))
+          (await isLikelyIApexRuntimeSkillPath(resolvedLinkedPath, entry.runtimeName))
         ) {
           await fs.unlink(target);
           if (linkSkill) {
@@ -183,28 +183,28 @@ export async function ensureCodexSkillsInjected(
           }
           await onLog(
             "stdout",
-            `[paperclip] Repaired Codex skill "${entry.runtimeName}" into ${skillsHome}\n`,
+            `[IApex] Repaired Codex skill "${entry.runtimeName}" into ${skillsHome}\n`,
           );
           continue;
         }
       }
 
-      const result = await ensurePaperclipSkillSymlink(entry.source, target, linkSkill);
+      const result = await ensureIApexSkillSymlink(entry.source, target, linkSkill);
       if (result === "skipped") continue;
 
       await onLog(
         "stdout",
-        `[paperclip] ${result === "repaired" ? "Repaired" : "Injected"} Codex skill "${entry.runtimeName}" into ${skillsHome}\n`,
+        `[IApex] ${result === "repaired" ? "Repaired" : "Injected"} Codex skill "${entry.runtimeName}" into ${skillsHome}\n`,
       );
     } catch (err) {
       await onLog(
         "stderr",
-        `[paperclip] Failed to inject Codex skill "${entry.key}" into ${skillsHome}: ${err instanceof Error ? err.message : String(err)}\n`,
+        `[IApex] Failed to inject Codex skill "${entry.key}" into ${skillsHome}: ${err instanceof Error ? err.message : String(err)}\n`,
       );
     }
   }
 
-  await pruneBrokenUnavailablePaperclipSkillSymlinks(
+  await pruneBrokenUnavailableIApexSkillSymlinks(
     skillsHome,
     skillsEntries.map((entry) => entry.runtimeName),
     onLog,
@@ -216,7 +216,7 @@ export async function execute(ctx: AdapterExecutionContext): Promise<AdapterExec
 
   const promptTemplate = asString(
     config.promptTemplate,
-    "You are agent {{agent.id}} ({{agent.name}}). Continue your Paperclip work.",
+    "You are agent {{agent.id}} ({{agent.name}}). Continue your IApex work.",
   );
   const command = asString(config.command, "codex");
   const model = asString(config.model, "");
@@ -230,7 +230,7 @@ export async function execute(ctx: AdapterExecutionContext): Promise<AdapterExec
     asBoolean(config.dangerouslyBypassSandbox, false),
   );
 
-  const workspaceContext = parseObject(context.paperclipWorkspace);
+  const workspaceContext = parseObject(context.IApexWorkspace);
   const workspaceCwd = asString(workspaceContext.cwd, "");
   const workspaceSource = asString(workspaceContext.source, "");
   const workspaceStrategy = asString(workspaceContext.strategy, "");
@@ -240,22 +240,22 @@ export async function execute(ctx: AdapterExecutionContext): Promise<AdapterExec
   const workspaceBranch = asString(workspaceContext.branchName, "");
   const workspaceWorktreePath = asString(workspaceContext.worktreePath, "");
   const agentHome = asString(workspaceContext.agentHome, "");
-  const workspaceHints = Array.isArray(context.paperclipWorkspaces)
-    ? context.paperclipWorkspaces.filter(
+  const workspaceHints = Array.isArray(context.IApexWorkspaces)
+    ? context.IApexWorkspaces.filter(
         (value): value is Record<string, unknown> => typeof value === "object" && value !== null,
       )
     : [];
-  const runtimeServiceIntents = Array.isArray(context.paperclipRuntimeServiceIntents)
-    ? context.paperclipRuntimeServiceIntents.filter(
+  const runtimeServiceIntents = Array.isArray(context.IApexRuntimeServiceIntents)
+    ? context.IApexRuntimeServiceIntents.filter(
         (value): value is Record<string, unknown> => typeof value === "object" && value !== null,
       )
     : [];
-  const runtimeServices = Array.isArray(context.paperclipRuntimeServices)
-    ? context.paperclipRuntimeServices.filter(
+  const runtimeServices = Array.isArray(context.IApexRuntimeServices)
+    ? context.IApexRuntimeServices.filter(
         (value): value is Record<string, unknown> => typeof value === "object" && value !== null,
       )
     : [];
-  const runtimePrimaryUrl = asString(context.paperclipRuntimePrimaryUrl, "");
+  const runtimePrimaryUrl = asString(context.IApexRuntimePrimaryUrl, "");
   const configuredCwd = asString(config.cwd, "");
   const useConfiguredInsteadOfAgentHome = workspaceSource === "agent_home" && configuredCwd.length > 0;
   const effectiveWorkspaceCwd = useConfiguredInsteadOfAgentHome ? "" : workspaceCwd;
@@ -265,7 +265,7 @@ export async function execute(ctx: AdapterExecutionContext): Promise<AdapterExec
     typeof envConfig.CODEX_HOME === "string" && envConfig.CODEX_HOME.trim().length > 0
       ? path.resolve(envConfig.CODEX_HOME.trim())
       : null;
-  const codexSkillEntries = await readPaperclipRuntimeSkillEntries(config, __moduleDir);
+  const codexSkillEntries = await readIApexRuntimeSkillEntries(config, __moduleDir);
   const desiredSkillNames = resolveCodexDesiredSkillNames(config, codexSkillEntries);
   await ensureAbsoluteDirectory(cwd, { createIfMissing: true });
   const preparedManagedCodexHome =
@@ -283,10 +283,10 @@ export async function execute(ctx: AdapterExecutionContext): Promise<AdapterExec
     },
   );
   const hasExplicitApiKey =
-    typeof envConfig.PAPERCLIP_API_KEY === "string" && envConfig.PAPERCLIP_API_KEY.trim().length > 0;
-  const env: Record<string, string> = { ...buildPaperclipEnv(agent) };
+    typeof envConfig.IApex_API_KEY === "string" && envConfig.IApex_API_KEY.trim().length > 0;
+  const env: Record<string, string> = { ...buildIApexEnv(agent) };
   env.CODEX_HOME = effectiveCodexHome;
-  env.PAPERCLIP_RUN_ID = runId;
+  env.IApex_RUN_ID = runId;
   const wakeTaskId =
     (typeof context.taskId === "string" && context.taskId.trim().length > 0 && context.taskId.trim()) ||
     (typeof context.issueId === "string" && context.issueId.trim().length > 0 && context.issueId.trim()) ||
@@ -311,67 +311,67 @@ export async function execute(ctx: AdapterExecutionContext): Promise<AdapterExec
     ? context.issueIds.filter((value): value is string => typeof value === "string" && value.trim().length > 0)
     : [];
   if (wakeTaskId) {
-    env.PAPERCLIP_TASK_ID = wakeTaskId;
+    env.IApex_TASK_ID = wakeTaskId;
   }
   if (wakeReason) {
-    env.PAPERCLIP_WAKE_REASON = wakeReason;
+    env.IApex_WAKE_REASON = wakeReason;
   }
   if (wakeCommentId) {
-    env.PAPERCLIP_WAKE_COMMENT_ID = wakeCommentId;
+    env.IApex_WAKE_COMMENT_ID = wakeCommentId;
   }
   if (approvalId) {
-    env.PAPERCLIP_APPROVAL_ID = approvalId;
+    env.IApex_APPROVAL_ID = approvalId;
   }
   if (approvalStatus) {
-    env.PAPERCLIP_APPROVAL_STATUS = approvalStatus;
+    env.IApex_APPROVAL_STATUS = approvalStatus;
   }
   if (linkedIssueIds.length > 0) {
-    env.PAPERCLIP_LINKED_ISSUE_IDS = linkedIssueIds.join(",");
+    env.IApex_LINKED_ISSUE_IDS = linkedIssueIds.join(",");
   }
   if (effectiveWorkspaceCwd) {
-    env.PAPERCLIP_WORKSPACE_CWD = effectiveWorkspaceCwd;
+    env.IApex_WORKSPACE_CWD = effectiveWorkspaceCwd;
   }
   if (workspaceSource) {
-    env.PAPERCLIP_WORKSPACE_SOURCE = workspaceSource;
+    env.IApex_WORKSPACE_SOURCE = workspaceSource;
   }
   if (workspaceStrategy) {
-    env.PAPERCLIP_WORKSPACE_STRATEGY = workspaceStrategy;
+    env.IApex_WORKSPACE_STRATEGY = workspaceStrategy;
   }
   if (workspaceId) {
-    env.PAPERCLIP_WORKSPACE_ID = workspaceId;
+    env.IApex_WORKSPACE_ID = workspaceId;
   }
   if (workspaceRepoUrl) {
-    env.PAPERCLIP_WORKSPACE_REPO_URL = workspaceRepoUrl;
+    env.IApex_WORKSPACE_REPO_URL = workspaceRepoUrl;
   }
   if (workspaceRepoRef) {
-    env.PAPERCLIP_WORKSPACE_REPO_REF = workspaceRepoRef;
+    env.IApex_WORKSPACE_REPO_REF = workspaceRepoRef;
   }
   if (workspaceBranch) {
-    env.PAPERCLIP_WORKSPACE_BRANCH = workspaceBranch;
+    env.IApex_WORKSPACE_BRANCH = workspaceBranch;
   }
   if (workspaceWorktreePath) {
-    env.PAPERCLIP_WORKSPACE_WORKTREE_PATH = workspaceWorktreePath;
+    env.IApex_WORKSPACE_WORKTREE_PATH = workspaceWorktreePath;
   }
   if (agentHome) {
     env.AGENT_HOME = agentHome;
   }
   if (workspaceHints.length > 0) {
-    env.PAPERCLIP_WORKSPACES_JSON = JSON.stringify(workspaceHints);
+    env.IApex_WORKSPACES_JSON = JSON.stringify(workspaceHints);
   }
   if (runtimeServiceIntents.length > 0) {
-    env.PAPERCLIP_RUNTIME_SERVICE_INTENTS_JSON = JSON.stringify(runtimeServiceIntents);
+    env.IApex_RUNTIME_SERVICE_INTENTS_JSON = JSON.stringify(runtimeServiceIntents);
   }
   if (runtimeServices.length > 0) {
-    env.PAPERCLIP_RUNTIME_SERVICES_JSON = JSON.stringify(runtimeServices);
+    env.IApex_RUNTIME_SERVICES_JSON = JSON.stringify(runtimeServices);
   }
   if (runtimePrimaryUrl) {
-    env.PAPERCLIP_RUNTIME_PRIMARY_URL = runtimePrimaryUrl;
+    env.IApex_RUNTIME_PRIMARY_URL = runtimePrimaryUrl;
   }
   for (const [k, v] of Object.entries(envConfig)) {
     if (typeof v === "string") env[k] = v;
   }
   if (!hasExplicitApiKey && authToken) {
-    env.PAPERCLIP_API_KEY = authToken;
+    env.IApex_API_KEY = authToken;
   }
   const effectiveEnv = Object.fromEntries(
     Object.entries({ ...process.env, ...env }).filter(
@@ -400,7 +400,7 @@ export async function execute(ctx: AdapterExecutionContext): Promise<AdapterExec
   if (runtimeSessionId && !canResumeSession) {
     await onLog(
       "stdout",
-      `[paperclip] Codex session "${runtimeSessionId}" was saved for cwd "${runtimeSessionCwd}" and will not be resumed in "${cwd}".\n`,
+      `[IApex] Codex session "${runtimeSessionId}" was saved for cwd "${runtimeSessionCwd}" and will not be resumed in "${cwd}".\n`,
     );
   }
   const instructionsFilePath = asString(config.instructionsFilePath, "").trim();
@@ -417,13 +417,13 @@ export async function execute(ctx: AdapterExecutionContext): Promise<AdapterExec
       instructionsChars = instructionsPrefix.length;
       await onLog(
         "stdout",
-        `[paperclip] Loaded agent instructions file: ${instructionsFilePath}\n`,
+        `[IApex] Loaded agent instructions file: ${instructionsFilePath}\n`,
       );
     } catch (err) {
       const reason = err instanceof Error ? err.message : String(err);
       await onLog(
         "stdout",
-        `[paperclip] Warning: could not read agent instructions file "${instructionsFilePath}": ${reason}\n`,
+        `[IApex] Warning: could not read agent instructions file "${instructionsFilePath}": ${reason}\n`,
       );
     }
   }
@@ -454,7 +454,7 @@ export async function execute(ctx: AdapterExecutionContext): Promise<AdapterExec
     !sessionId && bootstrapPromptTemplate.trim().length > 0
       ? renderTemplate(bootstrapPromptTemplate, templateData).trim()
       : "";
-  const sessionHandoffNote = asString(context.paperclipSessionHandoffMarkdown, "").trim();
+  const sessionHandoffNote = asString(context.IApexSessionHandoffMarkdown, "").trim();
   const prompt = joinPromptSections([
     instructionsPrefix,
     renderedBootstrapPrompt,
@@ -594,7 +594,7 @@ export async function execute(ctx: AdapterExecutionContext): Promise<AdapterExec
   ) {
     await onLog(
       "stdout",
-      `[paperclip] Codex resume session "${sessionId}" is unavailable; retrying with a fresh session.\n`,
+      `[IApex] Codex resume session "${sessionId}" is unavailable; retrying with a fresh session.\n`,
     );
     const retry = await runAttempt(null);
     return toResult(retry, true);

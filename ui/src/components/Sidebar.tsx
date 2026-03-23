@@ -51,7 +51,8 @@ export function Sidebar() {
     <aside className="w-60 h-full min-h-0 border-r border-border bg-background flex flex-col">
       {/* BRANDING IAPEX */}
       <div className="flex flex-col items-center justify-center py-6 border-b border-border shadow-sm">
-        <h1 className="text-3xl font-black tracking-tight text-primary m-0" style={{ background: 'linear-gradient(to right, #60a5fa, #818cf8)', WebkitBackgroundClip: 'text', color: 'transparent' }}>
+        <img src="/brands/iapex-logo.png" alt="IApex" className="h-10 w-10 mb-2" />
+        <h1 className="text-2xl font-black tracking-tight text-primary m-0" style={{ background: 'linear-gradient(to right, #60a5fa, #818cf8)', WebkitBackgroundClip: 'text', color: 'transparent' }}>
           IApex
         </h1>
         <p className="text-[10px] text-muted-foreground uppercase tracking-widest mt-1 text-center px-2">

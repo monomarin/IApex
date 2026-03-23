@@ -1,15 +1,15 @@
 import fs from "node:fs";
-import { paperclipConfigSchema, type PaperclipConfig } from "@paperclipai/shared";
-import { resolvePaperclipConfigPath } from "./paths.js";
+import { IApexConfigSchema, type IApexConfig } from "@iapexai/shared";
+import { resolveIApexConfigPath } from "./paths.js";
 
-export function readConfigFile(): PaperclipConfig | null {
-  const configPath = resolvePaperclipConfigPath();
+export function readConfigFile(): IApexConfig | null {
+  const configPath = resolveIApexConfigPath();
 
   if (!fs.existsSync(configPath)) return null;
 
   try {
     const raw = JSON.parse(fs.readFileSync(configPath, "utf-8"));
-    return paperclipConfigSchema.parse(raw);
+    return IApexConfigSchema.parse(raw);
   } catch {
     return null;
   }

@@ -26,9 +26,9 @@ FROM base AS build
 WORKDIR /app
 COPY --from=deps /app /app
 COPY . .
-RUN pnpm --filter @paperclipai/shared build
-RUN pnpm --filter @paperclipai/plugin-sdk build
-RUN pnpm --filter @paperclipai/ui build
+RUN pnpm --filter @iapexai/shared build
+RUN pnpm --filter @iapexai/plugin-sdk build
+RUN pnpm --filter @iapexai/ui build
 RUN cd server \
   && mkdir -p dist/onboarding-assets \
   && cp -R src/onboarding-assets/. dist/onboarding-assets/ \
@@ -44,21 +44,21 @@ FROM base AS production
 WORKDIR /app
 COPY --chown=node:node --from=build /app /app
 RUN npm install --global --omit=dev @anthropic-ai/claude-code@latest @openai/codex@latest opencode-ai \
-  && mkdir -p /paperclip \
-  && chown node:node /paperclip
+  && mkdir -p /iapex \
+  && chown node:node /iapex
 
 ENV NODE_ENV=production \
-  HOME=/paperclip \
+  HOME=/iapex \
   HOST=0.0.0.0 \
   PORT=3100 \
   SERVE_UI=true \
-  PAPERCLIP_HOME=/paperclip \
-  PAPERCLIP_INSTANCE_ID=default \
-  PAPERCLIP_CONFIG=/paperclip/instances/default/config.json \
-  PAPERCLIP_DEPLOYMENT_MODE=authenticated \
-  PAPERCLIP_DEPLOYMENT_EXPOSURE=private
+  IAPEX_HOME=/iapex \
+  IAPEX_INSTANCE_ID=default \
+  IAPEX_CONFIG=/iapex/instances/default/config.json \
+  IAPEX_DEPLOYMENT_MODE=authenticated \
+  IAPEX_DEPLOYMENT_EXPOSURE=private
 
-VOLUME ["/paperclip"]
+VOLUME ["/iapex"]
 EXPOSE 3100
 
 USER node

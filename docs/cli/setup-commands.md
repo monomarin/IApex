@@ -5,32 +5,32 @@ summary: Onboard, run, doctor, and configure
 
 Instance setup and diagnostics commands.
 
-## `paperclipai run`
+## `IApexai run`
 
 One-command bootstrap and start:
 
 ```sh
-pnpm paperclipai run
+pnpm IApexai run
 ```
 
 Does:
 
 1. Auto-onboards if config is missing
-2. Runs `paperclipai doctor` with repair enabled
+2. Runs `IApexai doctor` with repair enabled
 3. Starts the server when checks pass
 
 Choose a specific instance:
 
 ```sh
-pnpm paperclipai run --instance dev
+pnpm IApexai run --instance dev
 ```
 
-## `paperclipai onboard`
+## `IApexai onboard`
 
 Interactive first-time setup:
 
 ```sh
-pnpm paperclipai onboard
+pnpm IApexai onboard
 ```
 
 First prompt:
@@ -41,22 +41,22 @@ First prompt:
 Start immediately after onboarding:
 
 ```sh
-pnpm paperclipai onboard --run
+pnpm IApexai onboard --run
 ```
 
 Non-interactive defaults + immediate start (opens browser on server listen):
 
 ```sh
-pnpm paperclipai onboard --yes
+pnpm IApexai onboard --yes
 ```
 
-## `paperclipai doctor`
+## `IApexai doctor`
 
 Health checks with optional auto-repair:
 
 ```sh
-pnpm paperclipai doctor
-pnpm paperclipai doctor --repair
+pnpm IApexai doctor
+pnpm IApexai doctor --repair
 ```
 
 Validates:
@@ -67,51 +67,51 @@ Validates:
 - Storage configuration
 - Missing key files
 
-## `paperclipai configure`
+## `IApexai configure`
 
 Update configuration sections:
 
 ```sh
-pnpm paperclipai configure --section server
-pnpm paperclipai configure --section secrets
-pnpm paperclipai configure --section storage
+pnpm IApexai configure --section server
+pnpm IApexai configure --section secrets
+pnpm IApexai configure --section storage
 ```
 
-## `paperclipai env`
+## `IApexai env`
 
 Show resolved environment configuration:
 
 ```sh
-pnpm paperclipai env
+pnpm IApexai env
 ```
 
-## `paperclipai allowed-hostname`
+## `IApexai allowed-hostname`
 
 Allow a private hostname for authenticated/private mode:
 
 ```sh
-pnpm paperclipai allowed-hostname my-tailscale-host
+pnpm IApexai allowed-hostname my-tailscale-host
 ```
 
 ## Local Storage Paths
 
 | Data | Default Path |
 |------|-------------|
-| Config | `~/.paperclip/instances/default/config.json` |
-| Database | `~/.paperclip/instances/default/db` |
-| Logs | `~/.paperclip/instances/default/logs` |
-| Storage | `~/.paperclip/instances/default/data/storage` |
-| Secrets key | `~/.paperclip/instances/default/secrets/master.key` |
+| Config | `~/.IApex/instances/default/config.json` |
+| Database | `~/.IApex/instances/default/db` |
+| Logs | `~/.IApex/instances/default/logs` |
+| Storage | `~/.IApex/instances/default/data/storage` |
+| Secrets key | `~/.IApex/instances/default/secrets/master.key` |
 
 Override with:
 
 ```sh
-PAPERCLIP_HOME=/custom/home PAPERCLIP_INSTANCE_ID=dev pnpm paperclipai run
+IApex_HOME=/custom/home IApex_INSTANCE_ID=dev pnpm IApexai run
 ```
 
 Or pass `--data-dir` directly on any command:
 
 ```sh
-pnpm paperclipai run --data-dir ./tmp/paperclip-dev
-pnpm paperclipai doctor --data-dir ./tmp/paperclip-dev
+pnpm IApexai run --data-dir ./tmp/IApex-dev
+pnpm IApexai doctor --data-dir ./tmp/IApex-dev
 ```

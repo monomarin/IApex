@@ -52,7 +52,7 @@ This runs dev as `authenticated/private` and binds the server to `0.0.0.0` for p
 Allow additional private hostnames (for example custom Tailscale hostnames):
 
 ```sh
-pnpm paperclipai allowed-hostname dotta-macbook-pro
+pnpm IApexai allowed-hostname dotta-macbook-pro
 ```
 
 ## One-Command Local Run
@@ -60,27 +60,27 @@ pnpm paperclipai allowed-hostname dotta-macbook-pro
 For a first-time local install, you can bootstrap and run in one command:
 
 ```sh
-pnpm paperclipai run
+pnpm IApexai run
 ```
 
-`paperclipai run` does:
+`IApexai run` does:
 
 1. auto-onboard if config is missing
-2. `paperclipai doctor` with repair enabled
+2. `IApexai doctor` with repair enabled
 3. starts the server when checks pass
 
 ## Docker Quickstart (No local Node install)
 
-Build and run Paperclip in Docker:
+Build and run IApex in Docker:
 
 ```sh
-docker build -t paperclip-local .
-docker run --name paperclip \
+docker build -t IApex-local .
+docker run --name IApex \
   -p 3100:3100 \
   -e HOST=0.0.0.0 \
-  -e PAPERCLIP_HOME=/paperclip \
-  -v "$(pwd)/data/docker-paperclip:/paperclip" \
-  paperclip-local
+  -e IApex_HOME=/IApex \
+  -v "$(pwd)/data/docker-IApex:/IApex" \
+  IApex-local
 ```
 
 Or use Compose:
@@ -100,12 +100,12 @@ For a separate review-oriented container that keeps `codex`/`claude` login state
 For local development, leave `DATABASE_URL` unset.
 The server will automatically use embedded PostgreSQL and persist data at:
 
-- `~/.paperclip/instances/default/db`
+- `~/.IApex/instances/default/db`
 
 Override home and instance:
 
 ```sh
-PAPERCLIP_HOME=/custom/path PAPERCLIP_INSTANCE_ID=dev pnpm paperclipai run
+IApex_HOME=/custom/path IApex_INSTANCE_ID=dev pnpm IApexai run
 ```
 
 No Docker or external database is required for this mode.
@@ -114,45 +114,45 @@ No Docker or external database is required for this mode.
 
 For local development, the default storage provider is `local_disk`, which persists uploaded images/attachments at:
 
-- `~/.paperclip/instances/default/data/storage`
+- `~/.IApex/instances/default/data/storage`
 
 Configure storage provider/settings:
 
 ```sh
-pnpm paperclipai configure --section storage
+pnpm IApexai configure --section storage
 ```
 
 ## Default Agent Workspaces
 
-When a local agent run has no resolved project/session workspace, Paperclip falls back to an agent home workspace under the instance root:
+When a local agent run has no resolved project/session workspace, IApex falls back to an agent home workspace under the instance root:
 
-- `~/.paperclip/instances/default/workspaces/<agent-id>`
+- `~/.IApex/instances/default/workspaces/<agent-id>`
 
-This path honors `PAPERCLIP_HOME` and `PAPERCLIP_INSTANCE_ID` in non-default setups.
+This path honors `IApex_HOME` and `IApex_INSTANCE_ID` in non-default setups.
 
-For `codex_local`, Paperclip also manages a per-company Codex home under the instance root and seeds it from the shared Codex login/config home (`$CODEX_HOME` or `~/.codex`):
+For `codex_local`, IApex also manages a per-company Codex home under the instance root and seeds it from the shared Codex login/config home (`$CODEX_HOME` or `~/.codex`):
 
-- `~/.paperclip/instances/default/companies/<company-id>/codex-home`
+- `~/.IApex/instances/default/companies/<company-id>/codex-home`
 
 ## Worktree-local Instances
 
-When developing from multiple git worktrees, do not point two Paperclip servers at the same embedded PostgreSQL data directory.
+When developing from multiple git worktrees, do not point two IApex servers at the same embedded PostgreSQL data directory.
 
-Instead, create a repo-local Paperclip config plus an isolated instance for the worktree:
+Instead, create a repo-local IApex config plus an isolated instance for the worktree:
 
 ```sh
-paperclipai worktree init
+IApexai worktree init
 # or create the git worktree and initialize it in one step:
-pnpm paperclipai worktree:make paperclip-pr-432
+pnpm IApexai worktree:make IApex-pr-432
 ```
 
 This command:
 
-- writes repo-local files at `.paperclip/config.json` and `.paperclip/.env`
-- creates an isolated instance under `~/.paperclip-worktrees/instances/<worktree-id>/`
+- writes repo-local files at `.IApex/config.json` and `.IApex/.env`
+- creates an isolated instance under `~/.IApex-worktrees/instances/<worktree-id>/`
 - when run inside a linked git worktree, mirrors the effective git hooks into that worktree's private git dir
 - picks a free app port and embedded PostgreSQL port
-- by default seeds the isolated DB in `minimal` mode from the current effective Paperclip instance/config (repo-local worktree config when present, otherwise the default instance) via a logical SQL snapshot
+- by default seeds the isolated DB in `minimal` mode from the current effective IApex instance/config (repo-local worktree config when present, otherwise the default instance) via a logical SQL snapshot
 
 Seed modes:
 
@@ -160,35 +160,35 @@ Seed modes:
 - `full` makes a full logical clone of the source instance
 - `--no-seed` creates an empty isolated instance
 
-After `worktree init`, both the server and the CLI auto-load the repo-local `.paperclip/.env` when run inside that worktree, so normal commands like `pnpm dev`, `paperclipai doctor`, and `paperclipai db:backup` stay scoped to the worktree instance.
+After `worktree init`, both the server and the CLI auto-load the repo-local `.IApex/.env` when run inside that worktree, so normal commands like `pnpm dev`, `IApexai doctor`, and `IApexai db:backup` stay scoped to the worktree instance.
 
 That repo-local env also sets:
 
-- `PAPERCLIP_IN_WORKTREE=true`
-- `PAPERCLIP_WORKTREE_NAME=<worktree-name>`
-- `PAPERCLIP_WORKTREE_COLOR=<hex-color>`
+- `IApex_IN_WORKTREE=true`
+- `IApex_WORKTREE_NAME=<worktree-name>`
+- `IApex_WORKTREE_COLOR=<hex-color>`
 
 The server/UI use those values for worktree-specific branding such as the top banner and dynamically colored favicon.
 
 Print shell exports explicitly when needed:
 
 ```sh
-paperclipai worktree env
+IApexai worktree env
 # or:
-eval "$(paperclipai worktree env)"
+eval "$(IApexai worktree env)"
 ```
 
 ### Worktree CLI Reference
 
-**`pnpm paperclipai worktree init [options]`** — Create repo-local config/env and an isolated instance for the current worktree.
+**`pnpm IApexai worktree init [options]`** — Create repo-local config/env and an isolated instance for the current worktree.
 
 | Option | Description |
 |---|---|
 | `--name <name>` | Display name used to derive the instance id |
 | `--instance <id>` | Explicit isolated instance id |
-| `--home <path>` | Home root for worktree instances (default: `~/.paperclip-worktrees`) |
+| `--home <path>` | Home root for worktree instances (default: `~/.IApex-worktrees`) |
 | `--from-config <path>` | Source config.json to seed from |
-| `--from-data-dir <path>` | Source PAPERCLIP_HOME used when deriving the source config |
+| `--from-data-dir <path>` | Source IApex_HOME used when deriving the source config |
 | `--from-instance <id>` | Source instance id (default: `default`) |
 | `--server-port <port>` | Preferred server port |
 | `--db-port <port>` | Preferred embedded Postgres port |
@@ -199,22 +199,22 @@ eval "$(paperclipai worktree env)"
 Examples:
 
 ```sh
-paperclipai worktree init --no-seed
-paperclipai worktree init --seed-mode full
-paperclipai worktree init --from-instance default
-paperclipai worktree init --from-data-dir ~/.paperclip
-paperclipai worktree init --force
+IApexai worktree init --no-seed
+IApexai worktree init --seed-mode full
+IApexai worktree init --from-instance default
+IApexai worktree init --from-data-dir ~/.IApex
+IApexai worktree init --force
 ```
 
-**`pnpm paperclipai worktree:make <name> [options]`** — Create `~/NAME` as a git worktree, then initialize an isolated Paperclip instance inside it. This combines `git worktree add` with `worktree init` in a single step.
+**`pnpm IApexai worktree:make <name> [options]`** — Create `~/NAME` as a git worktree, then initialize an isolated IApex instance inside it. This combines `git worktree add` with `worktree init` in a single step.
 
 | Option | Description |
 |---|---|
 | `--start-point <ref>` | Remote ref to base the new branch on (e.g. `origin/main`) |
 | `--instance <id>` | Explicit isolated instance id |
-| `--home <path>` | Home root for worktree instances (default: `~/.paperclip-worktrees`) |
+| `--home <path>` | Home root for worktree instances (default: `~/.IApex-worktrees`) |
 | `--from-config <path>` | Source config.json to seed from |
-| `--from-data-dir <path>` | Source PAPERCLIP_HOME used when deriving the source config |
+| `--from-data-dir <path>` | Source IApex_HOME used when deriving the source config |
 | `--from-instance <id>` | Source instance id (default: `default`) |
 | `--server-port <port>` | Preferred server port |
 | `--db-port <port>` | Preferred embedded Postgres port |
@@ -225,12 +225,12 @@ paperclipai worktree init --force
 Examples:
 
 ```sh
-pnpm paperclipai worktree:make paperclip-pr-432
-pnpm paperclipai worktree:make my-feature --start-point origin/main
-pnpm paperclipai worktree:make experiment --no-seed
+pnpm IApexai worktree:make IApex-pr-432
+pnpm IApexai worktree:make my-feature --start-point origin/main
+pnpm IApexai worktree:make experiment --no-seed
 ```
 
-**`pnpm paperclipai worktree env [options]`** — Print shell exports for the current worktree-local Paperclip instance.
+**`pnpm IApexai worktree env [options]`** — Print shell exports for the current worktree-local IApex instance.
 
 | Option | Description |
 |---|---|
@@ -240,12 +240,12 @@ pnpm paperclipai worktree:make experiment --no-seed
 Examples:
 
 ```sh
-pnpm paperclipai worktree env
-pnpm paperclipai worktree env --json
-eval "$(pnpm paperclipai worktree env)"
+pnpm IApexai worktree env
+pnpm IApexai worktree env --json
+eval "$(pnpm IApexai worktree env)"
 ```
 
-For project execution worktrees, Paperclip can also run a project-defined provision command after it creates or reuses an isolated git worktree. Configure this on the project's execution workspace policy (`workspaceStrategy.provisionCommand`). The command runs inside the derived worktree and receives `PAPERCLIP_WORKSPACE_*`, `PAPERCLIP_PROJECT_ID`, `PAPERCLIP_AGENT_ID`, and `PAPERCLIP_ISSUE_*` environment variables so each repo can bootstrap itself however it wants.
+For project execution worktrees, IApex can also run a project-defined provision command after it creates or reuses an isolated git worktree. Configure this on the project's execution workspace policy (`workspaceStrategy.provisionCommand`). The command runs inside the derived worktree and receives `IApex_WORKSPACE_*`, `IApex_PROJECT_ID`, `IApex_AGENT_ID`, and `IApex_ISSUE_*` environment variables so each repo can bootstrap itself however it wants.
 
 ## Quick Health Checks
 
@@ -266,7 +266,7 @@ Expected:
 To wipe local dev data and start fresh:
 
 ```sh
-rm -rf ~/.paperclip/instances/default/db
+rm -rf ~/.IApex/instances/default/db
 pnpm dev
 ```
 
@@ -276,55 +276,55 @@ If you set `DATABASE_URL`, the server will use that instead of embedded PostgreS
 
 ## Automatic DB Backups
 
-Paperclip can run automatic DB backups on a timer. Defaults:
+IApex can run automatic DB backups on a timer. Defaults:
 
 - enabled
 - every 60 minutes
 - retain 30 days
-- backup dir: `~/.paperclip/instances/default/data/backups`
+- backup dir: `~/.IApex/instances/default/data/backups`
 
 Configure these in:
 
 ```sh
-pnpm paperclipai configure --section database
+pnpm IApexai configure --section database
 ```
 
 Run a one-off backup manually:
 
 ```sh
-pnpm paperclipai db:backup
+pnpm IApexai db:backup
 # or:
 pnpm db:backup
 ```
 
 Environment overrides:
 
-- `PAPERCLIP_DB_BACKUP_ENABLED=true|false`
-- `PAPERCLIP_DB_BACKUP_INTERVAL_MINUTES=<minutes>`
-- `PAPERCLIP_DB_BACKUP_RETENTION_DAYS=<days>`
-- `PAPERCLIP_DB_BACKUP_DIR=/absolute/or/~/path`
+- `IApex_DB_BACKUP_ENABLED=true|false`
+- `IApex_DB_BACKUP_INTERVAL_MINUTES=<minutes>`
+- `IApex_DB_BACKUP_RETENTION_DAYS=<days>`
+- `IApex_DB_BACKUP_DIR=/absolute/or/~/path`
 
 ## Secrets in Dev
 
 Agent env vars now support secret references. By default, secret values are stored with local encryption and only secret refs are persisted in agent config.
 
-- Default local key path: `~/.paperclip/instances/default/secrets/master.key`
-- Override key material directly: `PAPERCLIP_SECRETS_MASTER_KEY`
-- Override key file path: `PAPERCLIP_SECRETS_MASTER_KEY_FILE`
+- Default local key path: `~/.IApex/instances/default/secrets/master.key`
+- Override key material directly: `IApex_SECRETS_MASTER_KEY`
+- Override key file path: `IApex_SECRETS_MASTER_KEY_FILE`
 
 Strict mode (recommended outside local trusted machines):
 
 ```sh
-PAPERCLIP_SECRETS_STRICT_MODE=true
+IApex_SECRETS_STRICT_MODE=true
 ```
 
 When strict mode is enabled, sensitive env keys (for example `*_API_KEY`, `*_TOKEN`, `*_SECRET`) must use secret references instead of inline plain values.
 
 CLI configuration support:
 
-- `pnpm paperclipai onboard` writes a default `secrets` config section (`local_encrypted`, strict mode off, key file path set) and creates a local key file when needed.
-- `pnpm paperclipai configure --section secrets` lets you update provider/strict mode/key path and creates the local key file when needed.
-- `pnpm paperclipai doctor` validates secrets adapter configuration and can create a missing local key file with `--repair`.
+- `pnpm IApexai onboard` writes a default `secrets` config section (`local_encrypted`, strict mode off, key file path set) and creates a local key file when needed.
+- `pnpm IApexai configure --section secrets` lets you update provider/strict mode/key path and creates the local key file when needed.
+- `pnpm IApexai doctor` validates secrets adapter configuration and can create a missing local key file with `--repair`.
 
 Migration helper for existing inline env secrets:
 
@@ -338,7 +338,7 @@ pnpm secrets:migrate-inline-env --apply # apply migration
 Company deletion is intended as a dev/debug capability and can be disabled at runtime:
 
 ```sh
-PAPERCLIP_ENABLE_COMPANY_DELETION=false
+IApex_ENABLE_COMPANY_DELETION=false
 ```
 
 Default behavior:
@@ -348,27 +348,27 @@ Default behavior:
 
 ## CLI Client Operations
 
-Paperclip CLI now includes client-side control-plane commands in addition to setup commands.
+IApex CLI now includes client-side control-plane commands in addition to setup commands.
 
 Quick examples:
 
 ```sh
-pnpm paperclipai issue list --company-id <company-id>
-pnpm paperclipai issue create --company-id <company-id> --title "Investigate checkout conflict"
-pnpm paperclipai issue update <issue-id> --status in_progress --comment "Started triage"
+pnpm IApexai issue list --company-id <company-id>
+pnpm IApexai issue create --company-id <company-id> --title "Investigate checkout conflict"
+pnpm IApexai issue update <issue-id> --status in_progress --comment "Started triage"
 ```
 
 Set defaults once with context profiles:
 
 ```sh
-pnpm paperclipai context set --api-base http://localhost:3100 --company-id <company-id>
+pnpm IApexai context set --api-base http://localhost:3100 --company-id <company-id>
 ```
 
 Then run commands without repeating flags:
 
 ```sh
-pnpm paperclipai issue list
-pnpm paperclipai dashboard get
+pnpm IApexai issue list
+pnpm IApexai dashboard get
 ```
 
 See full command reference in `doc/CLI.md`.
@@ -381,7 +381,7 @@ Agent-oriented invite onboarding now exposes machine-readable API docs:
 - `GET /api/invites/:token/onboarding` returns onboarding manifest details (registration endpoint, claim endpoint template, skill install hints).
 - `GET /api/invites/:token/onboarding.txt` returns a plain-text onboarding doc intended for both human operators and agents (llm.txt-style handoff), including optional inviter message and suggested network host candidates.
 - `GET /api/skills/index` lists available skill documents.
-- `GET /api/skills/paperclip` returns the Paperclip heartbeat skill markdown.
+- `GET /api/skills/IApex` returns the IApex heartbeat skill markdown.
 
 ## OpenClaw Join Smoke Test
 
@@ -401,12 +401,12 @@ What it validates:
 Required permissions:
 
 - This script performs board-governed actions (create invite, approve join, wakeup another agent).
-- In authenticated mode, run with board auth via `PAPERCLIP_AUTH_HEADER` or `PAPERCLIP_COOKIE`.
+- In authenticated mode, run with board auth via `IApex_AUTH_HEADER` or `IApex_COOKIE`.
 
 Optional auth flags (for authenticated mode):
 
-- `PAPERCLIP_AUTH_HEADER` (for example `Bearer ...`)
-- `PAPERCLIP_COOKIE` (session cookie header value)
+- `IApex_AUTH_HEADER` (for example `Bearer ...`)
+- `IApex_COOKIE` (session cookie header value)
 
 ## OpenClaw Docker UI One-Command Script
 
@@ -429,11 +429,11 @@ Model behavior for this smoke script:
 
 State behavior for this smoke script:
 
-- defaults to isolated config dir `~/.openclaw-paperclip-smoke`
+- defaults to isolated config dir `~/.openclaw-IApex-smoke`
 - resets smoke agent state each run by default (`OPENCLAW_RESET_STATE=1`) to avoid stale provider/auth drift
 
 Networking behavior for this smoke script:
 
-- auto-detects and prints a Paperclip host URL reachable from inside OpenClaw Docker
-- default container-side host alias is `host.docker.internal` (override with `PAPERCLIP_HOST_FROM_CONTAINER` / `PAPERCLIP_HOST_PORT`)
-- if Paperclip rejects container hostnames in authenticated/private mode, allow `host.docker.internal` via `pnpm paperclipai allowed-hostname host.docker.internal` and restart Paperclip
+- auto-detects and prints a IApex host URL reachable from inside OpenClaw Docker
+- default container-side host alias is `host.docker.internal` (override with `IApex_HOST_FROM_CONTAINER` / `IApex_HOST_PORT`)
+- if IApex rejects container hostnames in authenticated/private mode, allow `host.docker.internal` via `pnpm IApexai allowed-hostname host.docker.internal` and restart IApex

@@ -1,5 +1,5 @@
 import { Router, type Request } from "express";
-import type { Db } from "@paperclipai/db";
+import type { Db } from "@iapexai/db";
 import {
   companyPortabilityExportSchema,
   companyPortabilityImportSchema,
@@ -7,7 +7,7 @@ import {
   createCompanySchema,
   updateCompanyBrandingSchema,
   updateCompanySchema,
-} from "@paperclipai/shared";
+} from "@iapexai/shared";
 import { forbidden } from "../errors.js";
 import { validate } from "../middleware/validate.js";
 import {

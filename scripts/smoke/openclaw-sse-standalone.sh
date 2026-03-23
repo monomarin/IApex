@@ -24,18 +24,18 @@ OPENCLAW_METHOD="${OPENCLAW_METHOD:-POST}"
 OPENCLAW_AUTH_HEADER="${OPENCLAW_AUTH_HEADER:-}"
 OPENCLAW_TIMEOUT_SEC="${OPENCLAW_TIMEOUT_SEC:-180}"
 OPENCLAW_MODEL="${OPENCLAW_MODEL:-openclaw}"
-OPENCLAW_USER="${OPENCLAW_USER:-paperclip-smoke}"
+OPENCLAW_USER="${OPENCLAW_USER:-IApex-smoke}"
 
-PAPERCLIP_RUN_ID="${PAPERCLIP_RUN_ID:-smoke-run-$(date +%s)}"
-PAPERCLIP_AGENT_ID="${PAPERCLIP_AGENT_ID:-openclaw-smoke-agent}"
-PAPERCLIP_COMPANY_ID="${PAPERCLIP_COMPANY_ID:-openclaw-smoke-company}"
-PAPERCLIP_API_URL="${PAPERCLIP_API_URL:-http://localhost:3100}"
-PAPERCLIP_TASK_ID="${PAPERCLIP_TASK_ID:-openclaw-smoke-task}"
-PAPERCLIP_WAKE_REASON="${PAPERCLIP_WAKE_REASON:-openclaw_smoke_test}"
-PAPERCLIP_WAKE_COMMENT_ID="${PAPERCLIP_WAKE_COMMENT_ID:-}"
-PAPERCLIP_APPROVAL_ID="${PAPERCLIP_APPROVAL_ID:-}"
-PAPERCLIP_APPROVAL_STATUS="${PAPERCLIP_APPROVAL_STATUS:-}"
-PAPERCLIP_LINKED_ISSUE_IDS="${PAPERCLIP_LINKED_ISSUE_IDS:-}"
+IApex_RUN_ID="${IApex_RUN_ID:-smoke-run-$(date +%s)}"
+IApex_AGENT_ID="${IApex_AGENT_ID:-openclaw-smoke-agent}"
+IApex_COMPANY_ID="${IApex_COMPANY_ID:-openclaw-smoke-company}"
+IApex_API_URL="${IApex_API_URL:-http://localhost:3100}"
+IApex_TASK_ID="${IApex_TASK_ID:-openclaw-smoke-task}"
+IApex_WAKE_REASON="${IApex_WAKE_REASON:-openclaw_smoke_test}"
+IApex_WAKE_COMMENT_ID="${IApex_WAKE_COMMENT_ID:-}"
+IApex_APPROVAL_ID="${IApex_APPROVAL_ID:-}"
+IApex_APPROVAL_STATUS="${IApex_APPROVAL_STATUS:-}"
+IApex_LINKED_ISSUE_IDS="${IApex_LINKED_ISSUE_IDS:-}"
 OPENCLAW_TEXT_PREFIX="${OPENCLAW_TEXT_PREFIX:-Standalone OpenClaw SSE smoke test.}"
 
 [[ -n "$OPENCLAW_URL" ]] || fail "OPENCLAW_URL is required"
@@ -43,51 +43,51 @@ OPENCLAW_TEXT_PREFIX="${OPENCLAW_TEXT_PREFIX:-Standalone OpenClaw SSE smoke test
 read -r -d '' TEXT_BODY <<EOF || true
 ${OPENCLAW_TEXT_PREFIX}
 
-PAPERCLIP_RUN_ID=${PAPERCLIP_RUN_ID}
-PAPERCLIP_AGENT_ID=${PAPERCLIP_AGENT_ID}
-PAPERCLIP_COMPANY_ID=${PAPERCLIP_COMPANY_ID}
-PAPERCLIP_API_URL=${PAPERCLIP_API_URL}
-PAPERCLIP_TASK_ID=${PAPERCLIP_TASK_ID}
-PAPERCLIP_WAKE_REASON=${PAPERCLIP_WAKE_REASON}
-PAPERCLIP_WAKE_COMMENT_ID=${PAPERCLIP_WAKE_COMMENT_ID}
-PAPERCLIP_APPROVAL_ID=${PAPERCLIP_APPROVAL_ID}
-PAPERCLIP_APPROVAL_STATUS=${PAPERCLIP_APPROVAL_STATUS}
-PAPERCLIP_LINKED_ISSUE_IDS=${PAPERCLIP_LINKED_ISSUE_IDS}
+IApex_RUN_ID=${IApex_RUN_ID}
+IApex_AGENT_ID=${IApex_AGENT_ID}
+IApex_COMPANY_ID=${IApex_COMPANY_ID}
+IApex_API_URL=${IApex_API_URL}
+IApex_TASK_ID=${IApex_TASK_ID}
+IApex_WAKE_REASON=${IApex_WAKE_REASON}
+IApex_WAKE_COMMENT_ID=${IApex_WAKE_COMMENT_ID}
+IApex_APPROVAL_ID=${IApex_APPROVAL_ID}
+IApex_APPROVAL_STATUS=${IApex_APPROVAL_STATUS}
+IApex_LINKED_ISSUE_IDS=${IApex_LINKED_ISSUE_IDS}
 
-Run your Paperclip heartbeat procedure now.
+Run your IApex heartbeat procedure now.
 EOF
 
 PAYLOAD="$(jq -nc \
   --arg text "$TEXT_BODY" \
   --arg model "$OPENCLAW_MODEL" \
   --arg user "$OPENCLAW_USER" \
-  --arg runId "$PAPERCLIP_RUN_ID" \
-  --arg agentId "$PAPERCLIP_AGENT_ID" \
-  --arg companyId "$PAPERCLIP_COMPANY_ID" \
-  --arg apiUrl "$PAPERCLIP_API_URL" \
-  --arg taskId "$PAPERCLIP_TASK_ID" \
-  --arg wakeReason "$PAPERCLIP_WAKE_REASON" \
-  --arg wakeCommentId "$PAPERCLIP_WAKE_COMMENT_ID" \
-  --arg approvalId "$PAPERCLIP_APPROVAL_ID" \
-  --arg approvalStatus "$PAPERCLIP_APPROVAL_STATUS" \
-  --arg linkedIssueIds "$PAPERCLIP_LINKED_ISSUE_IDS" \
+  --arg runId "$IApex_RUN_ID" \
+  --arg agentId "$IApex_AGENT_ID" \
+  --arg companyId "$IApex_COMPANY_ID" \
+  --arg apiUrl "$IApex_API_URL" \
+  --arg taskId "$IApex_TASK_ID" \
+  --arg wakeReason "$IApex_WAKE_REASON" \
+  --arg wakeCommentId "$IApex_WAKE_COMMENT_ID" \
+  --arg approvalId "$IApex_APPROVAL_ID" \
+  --arg approvalStatus "$IApex_APPROVAL_STATUS" \
+  --arg linkedIssueIds "$IApex_LINKED_ISSUE_IDS" \
   '{
     model: $model,
     user: $user,
     input: $text,
     stream: true,
     metadata: {
-      PAPERCLIP_RUN_ID: $runId,
-      PAPERCLIP_AGENT_ID: $agentId,
-      PAPERCLIP_COMPANY_ID: $companyId,
-      PAPERCLIP_API_URL: $apiUrl,
-      PAPERCLIP_TASK_ID: $taskId,
-      PAPERCLIP_WAKE_REASON: $wakeReason,
-      PAPERCLIP_WAKE_COMMENT_ID: $wakeCommentId,
-      PAPERCLIP_APPROVAL_ID: $approvalId,
-      PAPERCLIP_APPROVAL_STATUS: $approvalStatus,
-      PAPERCLIP_LINKED_ISSUE_IDS: $linkedIssueIds,
-      paperclip_session_key: ("paperclip:run:" + $runId)
+      IApex_RUN_ID: $runId,
+      IApex_AGENT_ID: $agentId,
+      IApex_COMPANY_ID: $companyId,
+      IApex_API_URL: $apiUrl,
+      IApex_TASK_ID: $taskId,
+      IApex_WAKE_REASON: $wakeReason,
+      IApex_WAKE_COMMENT_ID: $wakeCommentId,
+      IApex_APPROVAL_ID: $approvalId,
+      IApex_APPROVAL_STATUS: $approvalStatus,
+      IApex_LINKED_ISSUE_IDS: $linkedIssueIds,
+      IApex_session_key: ("IApex:run:" + $runId)
     }
   }')"
 
@@ -105,7 +105,7 @@ args=(
   -X "$OPENCLAW_METHOD"
   -H "content-type: application/json"
   -H "accept: text/event-stream"
-  -H "x-openclaw-session-key: paperclip:run:${PAPERCLIP_RUN_ID}"
+  -H "x-openclaw-session-key: IApex:run:${IApex_RUN_ID}"
   -D "$headers_file"
   -o "$body_file"
   --data "$PAYLOAD"

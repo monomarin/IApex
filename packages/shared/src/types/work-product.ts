@@ -8,7 +8,7 @@ export type IssueWorkProductType =
   | "document";
 
 export type IssueWorkProductProvider =
-  | "paperclip"
+  | "IApex"
   | "github"
   | "vercel"
   | "s3"

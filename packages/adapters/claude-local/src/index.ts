@@ -33,5 +33,5 @@ Operational fields:
 - graceSec (number, optional): SIGTERM grace period in seconds
 
 Notes:
-- When Paperclip realizes a workspace/runtime for a run, it injects PAPERCLIP_WORKSPACE_* and PAPERCLIP_RUNTIME_* env vars for agent-side tooling.
+- When IApex realizes a workspace/runtime for a run, it injects IApex_WORKSPACE_* and IApex_RUNTIME_* env vars for agent-side tooling.
 `;

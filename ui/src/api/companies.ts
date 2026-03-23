@@ -7,7 +7,7 @@ import type {
   CompanyPortabilityPreviewRequest,
   CompanyPortabilityPreviewResult,
   UpdateCompanyBranding,
-} from "@paperclipai/shared";
+} from "@iapexai/shared";
 import { api } from "./client";
 
 export type CompanyStats = Record<string, { agentCount: number; issueCount: number }>;

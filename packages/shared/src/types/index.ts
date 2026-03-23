@@ -178,7 +178,7 @@ export type {
   PluginLauncherDeclaration,
   PluginMinimumHostVersion,
   PluginUiDeclaration,
-  PaperclipPluginManifestV1,
+  IApexPluginManifestV1,
   PluginRecord,
   PluginStateRecord,
   PluginConfig,

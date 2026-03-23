@@ -1,8 +1,8 @@
 import { randomUUID } from "node:crypto";
-import type { Db } from "@paperclipai/db";
-import { activityLog } from "@paperclipai/db";
-import { PLUGIN_EVENT_TYPES, type PluginEventType } from "@paperclipai/shared";
-import type { PluginEvent } from "@paperclipai/plugin-sdk";
+import type { Db } from "@iapexai/db";
+import { activityLog } from "@iapexai/db";
+import { PLUGIN_EVENT_TYPES, type PluginEventType } from "@iapexai/shared";
+import type { PluginEvent } from "@iapexai/plugin-sdk";
 import { publishLiveEvent } from "./live-events.js";
 import { redactCurrentUserValue } from "../log-redaction.js";
 import { sanitizeRecord } from "../redaction.js";

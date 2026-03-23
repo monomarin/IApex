@@ -1,11 +1,11 @@
-import type { PaperclipPluginManifestV1 } from "@paperclipai/plugin-sdk";
+import type { IApexPluginManifestV1 } from "@iapexai/plugin-sdk";
 
-const manifest: PaperclipPluginManifestV1 = {
-  id: "paperclipai.plugin-authoring-smoke-example",
+const manifest: IApexPluginManifestV1 = {
+  id: "IApexai.plugin-authoring-smoke-example",
   apiVersion: 1,
   version: "0.1.0",
   displayName: "Plugin Authoring Smoke Example",
-  description: "A Paperclip plugin",
+  description: "A IApex plugin",
   author: "Plugin Author",
   categories: ["connector"],
   capabilities: [

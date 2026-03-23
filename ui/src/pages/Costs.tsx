@@ -9,7 +9,7 @@ import type {
   CostWindowSpendRow,
   FinanceEvent,
   QuotaWindow,
-} from "@paperclipai/shared";
+} from "@iapexai/shared";
 import { ArrowDownLeft, ArrowUpRight, ChevronDown, ChevronRight, Coins, DollarSign, ReceiptText } from "lucide-react";
 import { budgetsApi } from "../api/budgets";
 import { costsApi } from "../api/costs";
@@ -539,8 +539,8 @@ export function Costs() {
   const overviewError = spendError ?? financeError;
 
   return (
-    <div className="space-y-6 flex flex-col p-2 h-full">
-      <div className="space-y-5 flex-1 min-h-0 bg-white/5 border border-white/10 rounded-xl p-4">
+    <div className="space-y-8 p-4 min-h-full">
+      <div className="space-y-6 bg-white/5 border border-white/10 rounded-xl p-6 shadow-sm">
           <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
             <div>
                 <h2 className="text-[22px] font-bold text-slate-100 m-0">{t("costs")}</h2>

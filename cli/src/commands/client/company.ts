@@ -9,7 +9,7 @@ import type {
   CompanyPortabilityInclude,
   CompanyPortabilityPreviewResult,
   CompanyPortabilityImportResult,
-} from "@paperclipai/shared";
+} from "@iapexai/shared";
 import { ApiRequestError } from "../../client/http.js";
 import {
   addCommonClientOptions,
@@ -137,9 +137,9 @@ async function collectPackageFiles(
     }
     if (!entry.isFile()) continue;
     const isMarkdown = entry.name.endsWith(".md");
-    const isPaperclipYaml = entry.name === ".paperclip.yaml" || entry.name === ".paperclip.yml";
+    const isIApexYaml = entry.name === ".IApex.yaml" || entry.name === ".IApex.yml";
     const contentType = binaryContentTypeByExtension[path.extname(entry.name).toLowerCase()];
-    if (!isMarkdown && !isPaperclipYaml && !contentType) continue;
+    if (!isMarkdown && !isIApexYaml && !contentType) continue;
     const relativePath = path.relative(root, absolutePath).replace(/\\/g, "/");
     files[relativePath] = readPortableFileEntry(relativePath, await readFile(absolutePath));
   }
@@ -370,7 +370,7 @@ export function registerCompanyCommands(program: Command): void {
               out: path.resolve(opts.out!),
               rootPath: exported.rootPath,
               filesWritten: Object.keys(exported.files).length,
-              paperclipExtensionPath: exported.paperclipExtensionPath,
+              IApexExtensionPath: exported.IApexExtensionPath,
               warningCount: exported.warnings.length,
             },
             { json: ctx.json },

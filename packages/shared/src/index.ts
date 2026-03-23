@@ -297,7 +297,7 @@ export type {
   PluginLauncherDeclaration,
   PluginMinimumHostVersion,
   PluginUiDeclaration,
-  PaperclipPluginManifestV1,
+  IApexPluginManifestV1,
   PluginRecord,
   PluginStateRecord,
   PluginConfig,
@@ -537,7 +537,7 @@ export {
 } from "./project-mentions.js";
 
 export {
-  paperclipConfigSchema,
+  IApexConfigSchema,
   configMetaSchema,
   llmConfigSchema,
   databaseBackupConfigSchema,
@@ -550,7 +550,7 @@ export {
   storageLocalDiskConfigSchema,
   storageS3ConfigSchema,
   secretsLocalEncryptedConfigSchema,
-  type PaperclipConfig,
+  type IApexConfig,
   type LlmConfig,
   type DatabaseBackupConfig,
   type DatabaseConfig,

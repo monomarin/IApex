@@ -29,37 +29,37 @@ importers:
       '@clack/prompts':
         specifier: ^0.10.0
         version: 0.10.1
-      '@paperclipai/adapter-claude-local':
+      '@iapexai/adapter-claude-local':
         specifier: workspace:*
         version: link:../packages/adapters/claude-local
-      '@paperclipai/adapter-codex-local':
+      '@iapexai/adapter-codex-local':
         specifier: workspace:*
         version: link:../packages/adapters/codex-local
-      '@paperclipai/adapter-cursor-local':
+      '@iapexai/adapter-cursor-local':
         specifier: workspace:*
         version: link:../packages/adapters/cursor-local
-      '@paperclipai/adapter-gemini-local':
+      '@iapexai/adapter-gemini-local':
         specifier: workspace:*
         version: link:../packages/adapters/gemini-local
-      '@paperclipai/adapter-openclaw-gateway':
+      '@iapexai/adapter-openclaw-gateway':
         specifier: workspace:*
         version: link:../packages/adapters/openclaw-gateway
-      '@paperclipai/adapter-opencode-local':
+      '@iapexai/adapter-opencode-local':
         specifier: workspace:*
         version: link:../packages/adapters/opencode-local
-      '@paperclipai/adapter-pi-local':
+      '@iapexai/adapter-pi-local':
         specifier: workspace:*
         version: link:../packages/adapters/pi-local
-      '@paperclipai/adapter-utils':
+      '@iapexai/adapter-utils':
         specifier: workspace:*
         version: link:../packages/adapter-utils
-      '@paperclipai/db':
+      '@iapexai/db':
         specifier: workspace:*
         version: link:../packages/db
-      '@paperclipai/server':
+      '@iapexai/server':
         specifier: workspace:*
         version: link:../server
-      '@paperclipai/shared':
+      '@iapexai/shared':
         specifier: workspace:*
         version: link:../packages/shared
       commander:
@@ -99,7 +99,7 @@ importers:
 
   packages/adapters/claude-local:
     dependencies:
-      '@paperclipai/adapter-utils':
+      '@iapexai/adapter-utils':
         specifier: workspace:*
         version: link:../../adapter-utils
       picocolors:
@@ -115,7 +115,7 @@ importers:
 
   packages/adapters/codex-local:
     dependencies:
-      '@paperclipai/adapter-utils':
+      '@iapexai/adapter-utils':
         specifier: workspace:*
         version: link:../../adapter-utils
       picocolors:
@@ -131,7 +131,7 @@ importers:
 
   packages/adapters/cursor-local:
     dependencies:
-      '@paperclipai/adapter-utils':
+      '@iapexai/adapter-utils':
         specifier: workspace:*
         version: link:../../adapter-utils
       picocolors:
@@ -147,7 +147,7 @@ importers:
 
   packages/adapters/gemini-local:
     dependencies:
-      '@paperclipai/adapter-utils':
+      '@iapexai/adapter-utils':
         specifier: workspace:*
         version: link:../../adapter-utils
       picocolors:
@@ -163,7 +163,7 @@ importers:
 
   packages/adapters/openclaw-gateway:
     dependencies:
-      '@paperclipai/adapter-utils':
+      '@iapexai/adapter-utils':
         specifier: workspace:*
         version: link:../../adapter-utils
       picocolors:
@@ -185,7 +185,7 @@ importers:
 
   packages/adapters/opencode-local:
     dependencies:
-      '@paperclipai/adapter-utils':
+      '@iapexai/adapter-utils':
         specifier: workspace:*
         version: link:../../adapter-utils
       picocolors:
@@ -201,7 +201,7 @@ importers:
 
   packages/adapters/pi-local:
     dependencies:
-      '@paperclipai/adapter-utils':
+      '@iapexai/adapter-utils':
         specifier: workspace:*
         version: link:../../adapter-utils
       picocolors:
@@ -217,7 +217,7 @@ importers:
 
   packages/db:
     dependencies:
-      '@paperclipai/shared':
+      '@iapexai/shared':
         specifier: workspace:*
         version: link:../shared
       drizzle-orm:
@@ -246,9 +246,9 @@ importers:
         specifier: ^3.0.5
         version: 3.2.4(@types/debug@4.1.12)(@types/node@24.12.0)(jiti@2.6.1)(jsdom@28.1.0(@noble/hashes@2.0.1))(lightningcss@1.30.2)(tsx@4.21.0)
 
-  packages/plugins/create-paperclip-plugin:
+  packages/plugins/create-iapex-plugin:
     dependencies:
-      '@paperclipai/plugin-sdk':
+      '@iapexai/plugin-sdk':
         specifier: workspace:*
         version: link:../sdk
     devDependencies:
@@ -261,7 +261,7 @@ importers:
 
   packages/plugins/examples/plugin-authoring-smoke-example:
     dependencies:
-      '@paperclipai/plugin-sdk':
+      '@iapexai/plugin-sdk':
         specifier: workspace:*
         version: link:../../sdk
       react:
@@ -313,7 +313,7 @@ importers:
       '@lezer/highlight':
         specifier: ^1.2.1
         version: 1.2.3
-      '@paperclipai/plugin-sdk':
+      '@iapexai/plugin-sdk':
         specifier: workspace:*
         version: link:../../sdk
       codemirror:
@@ -344,7 +344,7 @@ importers:
 
   packages/plugins/examples/plugin-hello-world-example:
     dependencies:
-      '@paperclipai/plugin-sdk':
+      '@iapexai/plugin-sdk':
         specifier: workspace:*
         version: link:../../sdk
     devDependencies:
@@ -369,10 +369,10 @@ importers:
 
   packages/plugins/examples/plugin-kitchen-sink-example:
     dependencies:
-      '@paperclipai/plugin-sdk':
+      '@iapexai/plugin-sdk':
         specifier: workspace:*
         version: link:../../sdk
-      '@paperclipai/shared':
+      '@iapexai/shared':
         specifier: workspace:*
         version: link:../../../shared
     devDependencies:
@@ -400,7 +400,7 @@ importers:
 
   packages/plugins/sdk:
     dependencies:
-      '@paperclipai/shared':
+      '@iapexai/shared':
         specifier: workspace:*
         version: link:../../shared
       react:
@@ -435,37 +435,37 @@ importers:
       '@aws-sdk/client-s3':
         specifier: ^3.888.0
         version: 3.994.0
-      '@paperclipai/adapter-claude-local':
+      '@iapexai/adapter-claude-local':
         specifier: workspace:*
         version: link:../packages/adapters/claude-local
-      '@paperclipai/adapter-codex-local':
+      '@iapexai/adapter-codex-local':
         specifier: workspace:*
         version: link:../packages/adapters/codex-local
-      '@paperclipai/adapter-cursor-local':
+      '@iapexai/adapter-cursor-local':
         specifier: workspace:*
         version: link:../packages/adapters/cursor-local
-      '@paperclipai/adapter-gemini-local':
+      '@iapexai/adapter-gemini-local':
         specifier: workspace:*
         version: link:../packages/adapters/gemini-local
-      '@paperclipai/adapter-openclaw-gateway':
+      '@iapexai/adapter-openclaw-gateway':
         specifier: workspace:*
         version: link:../packages/adapters/openclaw-gateway
-      '@paperclipai/adapter-opencode-local':
+      '@iapexai/adapter-opencode-local':
         specifier: workspace:*
         version: link:../packages/adapters/opencode-local
-      '@paperclipai/adapter-pi-local':
+      '@iapexai/adapter-pi-local':
         specifier: workspace:*
         version: link:../packages/adapters/pi-local
-      '@paperclipai/adapter-utils':
+      '@iapexai/adapter-utils':
         specifier: workspace:*
         version: link:../packages/adapter-utils
-      '@paperclipai/db':
+      '@iapexai/db':
         specifier: workspace:*
         version: link:../packages/db
-      '@paperclipai/plugin-sdk':
+      '@iapexai/plugin-sdk':
         specifier: workspace:*
         version: link:../packages/plugins/sdk
-      '@paperclipai/shared':
+      '@iapexai/shared':
         specifier: workspace:*
         version: link:../packages/shared
       ajv:
@@ -586,31 +586,31 @@ importers:
       '@mdxeditor/editor':
         specifier: ^3.52.4
         version: 3.52.4(@codemirror/language@6.12.1)(@lezer/highlight@1.2.3)(@types/react-dom@19.2.3(@types/react@19.2.14))(@types/react@19.2.14)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(yjs@13.6.29)
-      '@paperclipai/adapter-claude-local':
+      '@iapexai/adapter-claude-local':
         specifier: workspace:*
         version: link:../packages/adapters/claude-local
-      '@paperclipai/adapter-codex-local':
+      '@iapexai/adapter-codex-local':
         specifier: workspace:*
         version: link:../packages/adapters/codex-local
-      '@paperclipai/adapter-cursor-local':
+      '@iapexai/adapter-cursor-local':
         specifier: workspace:*
         version: link:../packages/adapters/cursor-local
-      '@paperclipai/adapter-gemini-local':
+      '@iapexai/adapter-gemini-local':
         specifier: workspace:*
         version: link:../packages/adapters/gemini-local
-      '@paperclipai/adapter-openclaw-gateway':
+      '@iapexai/adapter-openclaw-gateway':
         specifier: workspace:*
         version: link:../packages/adapters/openclaw-gateway
-      '@paperclipai/adapter-opencode-local':
+      '@iapexai/adapter-opencode-local':
         specifier: workspace:*
         version: link:../packages/adapters/opencode-local
-      '@paperclipai/adapter-pi-local':
+      '@iapexai/adapter-pi-local':
         specifier: workspace:*
         version: link:../packages/adapters/pi-local
-      '@paperclipai/adapter-utils':
+      '@iapexai/adapter-utils':
         specifier: workspace:*
         version: link:../packages/adapter-utils
-      '@paperclipai/shared':
+      '@iapexai/shared':
         specifier: workspace:*
         version: link:../packages/shared
       '@radix-ui/react-slot':
@@ -2029,7 +2029,7 @@ packages:
   '@open-draft/deferred-promise@2.2.0':
     resolution: {integrity: sha512-CecwLWx3rhxVQF6V4bAgPS5t+So2sTbPgAzafKkVizyi7tlwpcFpdFqq+wqF2OwNBmqFuu6tOyouTuxgpMfzmA==}
 
-  '@paperclipai/adapter-utils@0.3.1':
+  '@iapexai/adapter-utils@0.3.1':
     resolution: {integrity: sha512-W66k+hJkQE8ma0asM/Sd90AC8HHy/BLG/sd0aOC+rDWw+gOasQyUkTnDoPv1zhQuTyKEEvLFV6ByOOKqEiAz/A==}
 
   '@paralleldrive/cuid2@2.3.1':
@@ -7729,7 +7729,7 @@ snapshots:
 
   '@open-draft/deferred-promise@2.2.0': {}
 
-  '@paperclipai/adapter-utils@0.3.1': {}
+  '@iapexai/adapter-utils@0.3.1': {}
 
   '@paralleldrive/cuid2@2.3.1':
     dependencies:
@@ -10328,7 +10328,7 @@ snapshots:
 
   hermes-paperclip-adapter@0.1.1:
     dependencies:
-      '@paperclipai/adapter-utils': 0.3.1
+      '@iapexai/adapter-utils': 0.3.1
       picocolors: 1.1.1
 
   html-encoding-sniffer@6.0.0(@noble/hashes@2.0.1):

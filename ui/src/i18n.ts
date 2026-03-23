@@ -17,7 +17,7 @@ const resources = {
       "costs": "Cost Tracker",
       "activity": "Activity",
       "settings": "Settings",
-      "chat": "Chat with CLAW"
+      "chat": "Chat with IApex"
     }
   },
   es: {
@@ -35,7 +35,7 @@ const resources = {
       "costs": "Costos API",
       "activity": "Actividad",
       "settings": "Configuración",
-      "chat": "Chat con CLAW"
+      "chat": "Chat con IApex"
     }
   }
 };

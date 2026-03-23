@@ -13,10 +13,10 @@ const autoRestartPollIntervalMs = 2500;
 const gracefulShutdownTimeoutMs = 10_000;
 const changedPathSampleLimit = 5;
 const repoRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
-const devServerStatusFilePath = path.join(repoRoot, ".paperclip", "dev-server-status.json");
+const devServerStatusFilePath = path.join(repoRoot, ".IApex", "dev-server-status.json");
 
 const watchedDirectories = [
-  ".paperclip",
+  ".IApex",
   "cli",
   "scripts",
   "server",
@@ -47,7 +47,7 @@ const ignoredDirectoryNames = new Set([
 ]);
 
 const ignoredRelativePaths = new Set([
-  ".paperclip/dev-server-status.json",
+  ".IApex/dev-server-status.json",
 ]);
 
 const tailscaleAuthFlagNames = new Set([
@@ -75,26 +75,26 @@ if (process.env.npm_config_authenticated_private === "true") {
 
 const env = {
   ...process.env,
-  PAPERCLIP_UI_DEV_MIDDLEWARE: "true",
+  IApex_UI_DEV_MIDDLEWARE: "true",
 };
 
 if (mode === "dev") {
-  env.PAPERCLIP_DEV_SERVER_STATUS_FILE = devServerStatusFilePath;
+  env.IApex_DEV_SERVER_STATUS_FILE = devServerStatusFilePath;
 }
 
 if (mode === "watch") {
-  env.PAPERCLIP_MIGRATION_PROMPT ??= "never";
-  env.PAPERCLIP_MIGRATION_AUTO_APPLY ??= "true";
+  env.IApex_MIGRATION_PROMPT ??= "never";
+  env.IApex_MIGRATION_AUTO_APPLY ??= "true";
 }
 
 if (tailscaleAuth) {
-  env.PAPERCLIP_DEPLOYMENT_MODE = "authenticated";
-  env.PAPERCLIP_DEPLOYMENT_EXPOSURE = "private";
-  env.PAPERCLIP_AUTH_BASE_URL_MODE = "auto";
+  env.IApex_DEPLOYMENT_MODE = "authenticated";
+  env.IApex_DEPLOYMENT_EXPOSURE = "private";
+  env.IApex_AUTH_BASE_URL_MODE = "auto";
   env.HOST = "0.0.0.0";
-  console.log("[paperclip] dev mode: authenticated/private (tailscale-friendly) on 0.0.0.0");
+  console.log("[IApex] dev mode: authenticated/private (tailscale-friendly) on 0.0.0.0");
 } else {
-  console.log("[paperclip] dev mode: local_trusted (default)");
+  console.log("[IApex] dev mode: local_trusted (default)");
 }
 
 const pnpmBin = process.platform === "win32" ? "pnpm.cmd" : "pnpm";
@@ -280,14 +280,14 @@ async function runPnpm(args, options = {}) {
 
 async function getMigrationStatusPayload() {
   const status = await runPnpm(
-    ["--filter", "@paperclipai/db", "exec", "tsx", "src/migration-status.ts", "--json"],
+    ["--filter", "@iapexai/db", "exec", "tsx", "src/migration-status.ts", "--json"],
     { env },
   );
   if (status.code !== 0) {
     process.stderr.write(
       status.stderr ||
         status.stdout ||
-        `[paperclip] Command failed with code ${status.code}: pnpm --filter @paperclipai/db exec tsx src/migration-status.ts --json\n`,
+        `[IApex] Command failed with code ${status.code}: pnpm --filter @iapexai/db exec tsx src/migration-status.ts --json\n`,
     );
     process.exit(status.code);
   }
@@ -298,7 +298,7 @@ async function getMigrationStatusPayload() {
     process.stderr.write(
       status.stderr ||
         status.stdout ||
-        "[paperclip] migration-status returned invalid JSON payload\n",
+        "[IApex] migration-status returned invalid JSON payload\n",
     );
     throw toError(error, "Unable to parse migration-status JSON output");
   }
@@ -316,7 +316,7 @@ async function refreshPendingMigrations() {
 
 async function maybePreflightMigrations(options = {}) {
   const interactive = options.interactive ?? mode === "watch";
-  const autoApply = options.autoApply ?? env.PAPERCLIP_MIGRATION_AUTO_APPLY === "true";
+  const autoApply = options.autoApply ?? env.IApex_MIGRATION_AUTO_APPLY === "true";
   const exitOnDecline = options.exitOnDecline ?? mode === "watch";
 
   const payload = await refreshPendingMigrations();
@@ -349,7 +349,7 @@ async function maybePreflightMigrations(options = {}) {
   if (!shouldApply) {
     if (exitOnDecline) {
       process.stderr.write(
-        `[paperclip] Pending migrations detected (${formatPendingMigrationSummary(pendingMigrations)}). ` +
+        `[IApex] Pending migrations detected (${formatPendingMigrationSummary(pendingMigrations)}). ` +
           "Refusing to start watch mode against a stale schema.\n",
       );
       process.exit(1);
@@ -377,9 +377,9 @@ async function maybePreflightMigrations(options = {}) {
 }
 
 async function buildPluginSdk() {
-  console.log("[paperclip] building plugin sdk...");
+  console.log("[IApex] building plugin sdk...");
   const result = await runPnpm(
-    ["--filter", "@paperclipai/plugin-sdk", "build"],
+    ["--filter", "@iapexai/plugin-sdk", "build"],
     { stdio: "inherit" },
   );
   if (result.signal) {
@@ -387,7 +387,7 @@ async function buildPluginSdk() {
     return;
   }
   if (result.code !== 0) {
-    console.error("[paperclip] plugin sdk build failed");
+    console.error("[IApex] plugin sdk build failed");
     process.exit(result.code);
   }
 }
@@ -457,7 +457,7 @@ async function startServerChild() {
   const serverScript = mode === "watch" ? "dev:watch" : "dev";
   child = spawn(
     pnpmBin,
-    ["--filter", "@paperclipai/server", serverScript, ...forwardedArgs],
+    ["--filter", "@iapexai/server", serverScript, ...forwardedArgs],
     { stdio: "inherit", env, shell: process.platform === "win32" },
   );
 

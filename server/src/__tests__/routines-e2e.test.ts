@@ -25,7 +25,7 @@ import {
   routineRuns,
   routines,
   routineTriggers,
-} from "@paperclipai/db";
+} from "@iapexai/db";
 import { errorHandler } from "../middleware/index.js";
 import { accessService } from "../services/access.js";
 
@@ -33,7 +33,7 @@ vi.mock("../services/index.js", async () => {
   const actual = await vi.importActual<typeof import("../services/index.js")>("../services/index.js");
   const { randomUUID } = await import("node:crypto");
   const { eq } = await import("drizzle-orm");
-  const { heartbeatRuns, issues } = await import("@paperclipai/db");
+  const { heartbeatRuns, issues } = await import("@iapexai/db");
 
   return {
     ...actual,
@@ -121,13 +121,13 @@ async function getAvailablePort(): Promise<number> {
 }
 
 async function startTempDatabase() {
-  const dataDir = fs.mkdtempSync(path.join(os.tmpdir(), "paperclip-routines-e2e-"));
+  const dataDir = fs.mkdtempSync(path.join(os.tmpdir(), "IApex-routines-e2e-"));
   const port = await getAvailablePort();
   const EmbeddedPostgres = await getEmbeddedPostgresCtor();
   const instance = new EmbeddedPostgres({
     databaseDir: dataDir,
-    user: "paperclip",
-    password: "paperclip",
+    user: "IApex",
+    password: "IApex",
     port,
     persistent: true,
     initdbFlags: ["--encoding=UTF8", "--locale=C"],
@@ -137,9 +137,9 @@ async function startTempDatabase() {
   await instance.initialise();
   await instance.start();
 
-  const adminConnectionString = `postgres://paperclip:paperclip@127.0.0.1:${port}/postgres`;
-  await ensurePostgresDatabase(adminConnectionString, "paperclip");
-  const connectionString = `postgres://paperclip:paperclip@127.0.0.1:${port}/paperclip`;
+  const adminConnectionString = `postgres://IApex:IApex@127.0.0.1:${port}/postgres`;
+  await ensurePostgresDatabase(adminConnectionString, "IApex");
+  const connectionString = `postgres://IApex:IApex@127.0.0.1:${port}/IApex`;
   await applyPendingMigrations(connectionString);
   return { connectionString, dataDir, instance };
 }
@@ -202,7 +202,7 @@ describe("routine routes end-to-end", () => {
 
     await db.insert(companies).values({
       id: companyId,
-      name: "Paperclip",
+      name: "IApex",
       issuePrefix,
       requireBoardApprovalForNewAgents: false,
     });

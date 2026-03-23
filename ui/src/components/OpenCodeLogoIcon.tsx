@@ -9,12 +9,12 @@ export function OpenCodeLogoIcon({ className }: OpenCodeLogoIconProps) {
     <>
       <img
         src="/brands/opencode-logo-light-square.svg"
-        alt="OpenCode"
+        alt="IApex"
         className={cn("dark:hidden", className)}
       />
       <img
-        src="/brands/opencode-logo-dark-square.svg"
-        alt="OpenCode"
+        src="/brands/iapex-logo-dark.svg"
+        alt="IApex"
         className={cn("hidden dark:block", className)}
       />
     </>
