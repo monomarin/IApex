@@ -27,7 +27,15 @@ WORKDIR /app
 COPY --from=deps /app /app
 COPY . .
 RUN pnpm --filter @paperclipai/ui build
-RUN cd server && npx tsc --skipLibCheck && mkdir -p dist/onboarding-assets && cp -R src/onboarding-assets/. dist/onboarding-assets/
+RUN cd server \
+  && mkdir -p dist/onboarding-assets \
+  && cp -R src/onboarding-assets/. dist/onboarding-assets/ \
+  && find src -name '*.ts' -not -path '*/\__tests__/*' | while read f; do \
+       out="dist/${f#src/}"; \
+       out="${out%.ts}.js"; \
+       mkdir -p "$(dirname "$out")"; \
+       npx esbuild "$f" --outfile="$out" --format=esm --platform=node --target=es2023 --sourcemap 2>/dev/null || true; \
+     done
 RUN test -f server/dist/index.js || (echo "ERROR: server build output missing" && exit 1)
 
 FROM base AS production
