@@ -125,8 +125,8 @@ export function Dashboard() {
               <div className="min-w-0 pr-2">
                 <div className="text-[11px] font-semibold text-slate-200 truncate max-w-[120px]">{ag.name}</div>
                 <div className="flex items-center gap-1.5 mt-0.5">
-                  <StatusDot status={ag.isPaused ? "idle" : "active"} pulse={!ag.isPaused}/>
-                  <span className="text-[9px] text-slate-500">{ag.isPaused ? "Paused" : "Running"} · {display.label}</span>
+                  <StatusDot status="active" pulse={true}/>
+                  <span className="text-[9px] text-slate-500">Running · {display.label}</span>
                 </div>
               </div>
             </Link>
@@ -147,8 +147,8 @@ export function Dashboard() {
           {recentActivity.map((act, i) => (
             <div key={act.id} className="flex items-center gap-3 py-2.5 px-3 rounded-lg" style={{ borderLeft: `2px solid ${i===0?"#8b5cf6":"transparent"}`, background: i===0?"rgba(139,92,246,0.06)":"transparent" }}>
               <StatusDot status="active" pulse={i===0}/>
-              <span className="flex-1 text-[11px] text-slate-300 truncate">{act.message}</span>
-              <span className="text-[9px] text-slate-500 whitespace-nowrap bg-white/5 px-2 py-0.5 rounded">{act.topic || "general"}</span>
+              <span className="flex-1 text-[11px] text-slate-300 truncate">{(act as any).message || (act as any).description || "Activity"}</span>
+              <span className="text-[9px] text-slate-500 whitespace-nowrap bg-white/5 px-2 py-0.5 rounded">{(act as any).topic || "general"}</span>
               <span className="text-[9px] text-slate-500 whitespace-nowrap w-16 text-right">{new Date(act.createdAt).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</span>
             </div>
           ))}

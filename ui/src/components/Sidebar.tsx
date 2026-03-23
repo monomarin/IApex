@@ -104,7 +104,7 @@ export function Sidebar() {
             label="Chat MD (IApex)"
             icon={MessageSquare}
             textBadge="New"
-            textBadgeTone="lime"
+            textBadgeTone="default"
           />
           <PluginSlotOutlet
             slotTypes={["sidebar"]}
