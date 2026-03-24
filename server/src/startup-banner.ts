@@ -71,7 +71,9 @@ function resolveAgentJwtSecretStatus(
   status: "pass" | "warn";
   message: string;
 } {
-  const envValue = process.env.IApex_AGENT_JWT_SECRET?.trim();
+  const envValue =
+    process.env.IAPEX_AGENT_JWT_SECRET?.trim() ??
+    process.env.IApex_AGENT_JWT_SECRET?.trim();
   if (envValue) {
     return {
       status: "pass",
@@ -81,7 +83,12 @@ function resolveAgentJwtSecretStatus(
 
   if (existsSync(envFilePath)) {
     const parsed = parseEnvFileContents(readFileSync(envFilePath, "utf-8"));
-    const fileValue = typeof parsed.IApex_AGENT_JWT_SECRET === "string" ? parsed.IApex_AGENT_JWT_SECRET.trim() : "";
+    const fileValue =
+      typeof parsed.IAPEX_AGENT_JWT_SECRET === "string"
+        ? parsed.IAPEX_AGENT_JWT_SECRET.trim()
+        : typeof parsed.IApex_AGENT_JWT_SECRET === "string"
+          ? parsed.IApex_AGENT_JWT_SECRET.trim()
+          : "";
     if (fileValue) {
       return {
         status: "warn",
@@ -134,12 +141,12 @@ export function printStartupBanner(opts: StartupBannerOptions): void {
     : color("disabled", "yellow");
 
   const art = [
-    color("██████╗  █████╗ ██████╗ ███████╗██████╗  ██████╗██╗     ██╗██████╗ ", "cyan"),
-    color("██╔══██╗██╔══██╗██╔══██╗██╔════╝██╔══██╗██╔════╝██║     ██║██╔══██╗", "cyan"),
-    color("██████╔╝███████║██████╔╝█████╗  ██████╔╝██║     ██║     ██║██████╔╝", "cyan"),
-    color("██╔═══╝ ██╔══██║██╔═══╝ ██╔══╝  ██╔══██╗██║     ██║     ██║██╔═══╝ ", "cyan"),
-    color("██║     ██║  ██║██║     ███████╗██║  ██║╚██████╗███████╗██║██║     ", "cyan"),
-    color("╚═╝     ╚═╝  ╚═╝╚═╝     ╚══════╝╚═╝  ╚═╝ ╚═════╝╚══════╝╚═╝╚═╝     ", "cyan"),
+    color(" ██╗ █████╗ ██████╗ ███████╗██╗  ██╗", "cyan"),
+    color(" ██║██╔══██╗██╔══██╗██╔════╝╚██╗██╔╝", "cyan"),
+    color(" ██║███████║██████╔╝█████╗   ╚███╔╝ ", "cyan"),
+    color(" ██║██╔══██║██╔═══╝ ██╔══╝   ██╔██╗ ", "cyan"),
+    color(" ██║██║  ██║██║     ███████╗██╔╝ ██╗", "cyan"),
+    color(" ╚═╝╚═╝  ╚═╝╚═╝     ╚══════╝╚═╝  ╚═╝", "cyan"),
   ];
 
   const lines = [
