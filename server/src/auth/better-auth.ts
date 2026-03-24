@@ -115,6 +115,11 @@ export async function resolveBetterAuthSessionFromHeaders(
   const api = (auth as unknown as { api?: { getSession?: (input: unknown) => Promise<unknown> } }).api;
   if (!api?.getSession) return null;
 
+  // Debug: log cookies and protocol to see if proxy is working
+  const cookieHeader = headers.get("cookie") ?? "none";
+  const xForwardedProto = headers.get("x-forwarded-proto") ?? "none";
+  console.log(`[AUTH-DEBUG] get-session attempt - Proto: ${xForwardedProto}, Cookies: ${cookieHeader.substring(0, 30)}...`);
+
   const sessionValue = await api.getSession({
     headers,
   });
