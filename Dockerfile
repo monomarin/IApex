@@ -45,7 +45,7 @@ WORKDIR /app
 COPY --chown=node:node --from=build /app /app
 RUN npm install --global --omit=dev @anthropic-ai/claude-code@latest @openai/codex@latest opencode-ai \
   && mkdir -p /iapex \
-  && chown node:node /iapex
+  && chown -R node:node /iapex
 
 ENV NODE_ENV=production \
   HOME=/iapex \
