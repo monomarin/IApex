@@ -40,6 +40,11 @@ RUN cd server \
      done
 RUN test -f server/dist/index.js || (echo "ERROR: server build output missing" && exit 1)
 
+# Eliminar carpetas src y basura para que el COPY final sea ligero y no explote el servidor
+RUN find . -name "src" -type d -exec rm -rf {} + \
+    && find . -name "*.ts" -type f -delete \
+    && rm -rf .git
+
 FROM base AS production
 WORKDIR /app
 COPY --chown=node:node --from=build /app /app
