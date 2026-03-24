@@ -77,6 +77,7 @@ export async function createApp(
   },
 ) {
   const app = express();
+  app.set("trust proxy", true);
 
   app.use(express.json({
     verify: (req, _res, buf) => {
