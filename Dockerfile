@@ -40,10 +40,9 @@ RUN cd server \
      done
 RUN test -f server/dist/index.js || (echo "ERROR: server build output missing" && exit 1)
 
-# Eliminar carpetas src y basura para que el COPY final sea ligero y no explote el servidor
-RUN find . -name "src" -type d -exec rm -rf {} + \
-    && find . -name "*.ts" -type f -delete \
-    && rm -rf .git
+# Solo borramos la carpeta src de la UI (que es muy pesada) y .git.
+# Mantenemos las de los paquetes porque el runtime de tsx las necesita para resolver dependencias internas.
+RUN rm -rf ui/src .git
 
 FROM base AS production
 WORKDIR /app
