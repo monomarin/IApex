@@ -443,10 +443,12 @@ export async function startServer(): Promise<StartedServer> {
       resolveBetterAuthSessionFromHeaders,
     } = await import("./auth/better-auth.js");
     const betterAuthSecret =
-      process.env.BETTER_AUTH_SECRET?.trim() ?? process.env.IApex_AGENT_JWT_SECRET?.trim();
+      process.env.BETTER_AUTH_SECRET?.trim() ??
+      process.env.IAPEX_AGENT_JWT_SECRET?.trim() ??
+      process.env.IApex_AGENT_JWT_SECRET?.trim();
     if (!betterAuthSecret) {
       throw new Error(
-        "authenticated mode requires BETTER_AUTH_SECRET (or IApex_AGENT_JWT_SECRET) to be set",
+        "authenticated mode requires BETTER_AUTH_SECRET (or IAPEX_AGENT_JWT_SECRET) to be set",
       );
     }
     const derivedTrustedOrigins = deriveAuthTrustedOrigins(config);
