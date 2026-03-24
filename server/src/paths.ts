@@ -25,7 +25,8 @@ function findConfigFileFromAncestors(startDir: string): string | null {
 
 export function resolveIApexConfigPath(overridePath?: string): string {
   if (overridePath) return path.resolve(overridePath);
-  if (process.env.IAPEX_CONFIG) return path.resolve(process.env.IAPEX_CONFIG);
+  if (process.env.IAPEX_CONFIG || process.env.IApex_CONFIG)
+    return path.resolve((process.env.IAPEX_CONFIG ?? process.env.IApex_CONFIG)!);
   return findConfigFileFromAncestors(process.cwd()) ?? resolveDefaultConfigPath();
 }
 

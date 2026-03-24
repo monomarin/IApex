@@ -53,8 +53,11 @@ ENV NODE_ENV=production \
   PORT=3100 \
   SERVE_UI=true \
   IAPEX_HOME=/iapex \
+  IApex_HOME=/iapex \
   IAPEX_INSTANCE_ID=default \
+  IApex_INSTANCE_ID=default \
   IAPEX_CONFIG=/iapex/instances/default/config.json \
+  IApex_CONFIG=/iapex/instances/default/config.json \
   IAPEX_DEPLOYMENT_MODE=authenticated \
   IAPEX_DEPLOYMENT_EXPOSURE=private
 

@@ -29,7 +29,10 @@ export function applyDataDirOverride(
   process.env.IApex_HOME = resolvedDataDir;
 
   if (support.hasConfigOption) {
-    const hasConfigOverride = Boolean(options.config?.trim()) || Boolean(process.env.IApex_CONFIG?.trim());
+    const hasConfigOverride =
+      Boolean(options.config?.trim()) ||
+      Boolean(process.env.IAPEX_CONFIG?.trim()) ||
+      Boolean(process.env.IApex_CONFIG?.trim());
     if (!hasConfigOverride) {
       const instanceId = resolveIApexInstanceId(options.instance);
       process.env.IApex_INSTANCE_ID = instanceId;

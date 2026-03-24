@@ -5,13 +5,17 @@ const DEFAULT_INSTANCE_ID = "default";
 const INSTANCE_ID_RE = /^[a-zA-Z0-9_-]+$/;
 
 export function resolveIApexHomeDir(): string {
-  const envHome = process.env.IApex_HOME?.trim();
+  const envHome = (process.env.IAPEX_HOME ?? process.env.IApex_HOME)?.trim();
   if (envHome) return path.resolve(expandHomePrefix(envHome));
   return path.resolve(os.homedir(), ".IApex");
 }
 
 export function resolveIApexInstanceId(override?: string): string {
-  const raw = override?.trim() || process.env.IApex_INSTANCE_ID?.trim() || DEFAULT_INSTANCE_ID;
+  const raw =
+    override?.trim() ||
+    process.env.IAPEX_INSTANCE_ID?.trim() ||
+    process.env.IApex_INSTANCE_ID?.trim() ||
+    DEFAULT_INSTANCE_ID;
   if (!INSTANCE_ID_RE.test(raw)) {
     throw new Error(
       `Invalid instance id '${raw}'. Allowed characters: letters, numbers, '_' and '-'.`,
