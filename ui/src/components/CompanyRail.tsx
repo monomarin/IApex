@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { Paperclip as IApexIcon, Plus } from "lucide-react";
+import { Paperclip as IApexIcon, Plus, PanelLeftClose, PanelLeftOpen } from "lucide-react";
 import { useQueries } from "@tanstack/react-query";
 import {
   DndContext,
@@ -17,6 +17,7 @@ import {
 } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import { useCompany } from "../context/CompanyContext";
+import { useSidebar } from "../context/SidebarContext";
 import { useDialog } from "../context/DialogContext";
 import { cn } from "../lib/utils";
 import { queryKeys } from "../lib/queryKeys";
@@ -156,6 +157,7 @@ function SortableCompanyItem({
 export function CompanyRail() {
   const { companies, selectedCompanyId, setSelectedCompanyId } = useCompany();
   const { openOnboarding } = useDialog();
+  const { sidebarOpen, toggleSidebar, isMobile } = useSidebar();
   const navigate = useNavigate();
   const location = useLocation();
   const isInstanceRoute = location.pathname.startsWith("/instance/");
@@ -323,6 +325,40 @@ export function CompanyRail() {
           </TooltipContent>
         </Tooltip>
       </div>
+
+      {/* Sidebar toggle button — desktop only */}
+      {!isMobile && (
+        <>
+          <div className="w-8 h-px bg-border mx-auto shrink-0" />
+          <div className="flex items-center justify-center py-2 pb-3 shrink-0">
+            <Tooltip delayDuration={300}>
+              <TooltipTrigger asChild>
+                <button
+                  onClick={toggleSidebar}
+                  aria-label={sidebarOpen ? "Colapsar sidebar" : "Expandir sidebar"}
+                  className={cn(
+                    "group flex items-center justify-center w-9 h-9 rounded-xl",
+                    "text-muted-foreground hover:text-foreground",
+                    "bg-transparent hover:bg-accent",
+                    "border border-transparent hover:border-border",
+                    "transition-all duration-200 ease-out",
+                    !sidebarOpen && "text-foreground/60"
+                  )}
+                >
+                  {sidebarOpen ? (
+                    <PanelLeftClose className="h-[18px] w-[18px] transition-transform duration-200 group-hover:scale-110" />
+                  ) : (
+                    <PanelLeftOpen className="h-[18px] w-[18px] transition-transform duration-200 group-hover:scale-110" />
+                  )}
+                </button>
+              </TooltipTrigger>
+              <TooltipContent side="right" sideOffset={8}>
+                <p>{sidebarOpen ? "Colapsar sidebar" : "Expandir sidebar"}</p>
+              </TooltipContent>
+            </Tooltip>
+          </div>
+        </>
+      )}
     </div>
   );
 }
