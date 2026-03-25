@@ -91,8 +91,7 @@ export function createBetterAuthInstance(db: Db, config: Config, trustedOrigins?
       requireEmailVerification: false,
       disableSignUp: config.authDisableSignUp,
     },
-    // Forzamos false para testear si el proxy está rompiendo las cookies seguras
-    advanced: { useSecureCookies: false },
+    ...(isHttpOnly ? { advanced: { useSecureCookies: false } } : {}),
   };
 
   if (!baseUrl) {
@@ -115,12 +114,6 @@ export async function resolveBetterAuthSessionFromHeaders(
 ): Promise<BetterAuthSessionResult | null> {
   const api = (auth as unknown as { api?: { getSession?: (input: unknown) => Promise<unknown> } }).api;
   if (!api?.getSession) return null;
-
-  // Debug: log cookies and protocol to see if proxy is working
-  const cookieHeader = headers.get("cookie") ?? "none";
-  const xForwardedProto = headers.get("x-forwarded-proto") ?? "none";
-  const xForwardedHost = headers.get("x-forwarded-host") ?? "none";
-  console.log(`[AUTH-DEBUG] get-session - Proto: ${xForwardedProto}, Host: ${xForwardedHost}, Cookies: ${cookieHeader.substring(0, 50)}...`);
 
   const sessionValue = await api.getSession({
     headers,
