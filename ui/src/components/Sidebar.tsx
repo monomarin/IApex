@@ -109,7 +109,7 @@ export function Sidebar() {
             textBadgeTone="default"
           />
           <SidebarNavItem
-            to="/calendar"
+            to="calendar"
             label="Calendar"
             icon={CalendarDays}
           />
