@@ -52,10 +52,12 @@ export function Sidebar() {
     <aside className="w-60 h-full min-h-0 border-r border-border bg-background flex flex-col">
       {/* BRANDING IAPEX */}
       <div className="flex flex-col items-center justify-center py-6 border-b border-border shadow-sm">
-        <img src="/brands/iapex-logo.png" alt="IApex" className="h-10 w-10 mb-2" />
-        <h1 className="text-2xl font-black tracking-tight text-primary m-0" style={{ background: 'linear-gradient(to right, #60a5fa, #818cf8)', WebkitBackgroundClip: 'text', color: 'transparent' }}>
-          IApex
-        </h1>
+        <a href="/" className="flex flex-col items-center">
+          <img src="/logo-iapex.png" alt="IApex" className="h-10 w-10 mb-2" onError={(e) => { e.currentTarget.src = '/logo.png'; }} />
+          <h1 className="text-2xl font-black tracking-tight text-primary m-0" style={{ background: 'linear-gradient(to right, #60a5fa, #818cf8)', WebkitBackgroundClip: 'text', color: 'transparent' }}>
+            IApex
+          </h1>
+        </a>
         <p className="text-[10px] text-muted-foreground uppercase tracking-widest mt-1 text-center px-2">
           la vista de tu flota aut&oacute;noma
         </p>
@@ -102,7 +104,7 @@ export function Sidebar() {
             alert={inboxBadge.failedRuns > 0}
           />
           <SidebarNavItem
-            to="/chat"
+            to="chat"
             label="Chat MD (IApex)"
             icon={MessageSquare}
             textBadge="New"
