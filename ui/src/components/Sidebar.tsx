@@ -12,6 +12,7 @@ import {
   Repeat,
   Settings,
   MessageSquare,
+  CalendarDays,
 } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
 import { SidebarSection } from "./SidebarSection";
@@ -106,6 +107,11 @@ export function Sidebar() {
             icon={MessageSquare}
             textBadge="New"
             textBadgeTone="default"
+          />
+          <SidebarNavItem
+            to="/calendar"
+            label="Calendar"
+            icon={CalendarDays}
           />
           <PluginSlotOutlet
             slotTypes={["sidebar"]}
